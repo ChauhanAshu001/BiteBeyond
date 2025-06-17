@@ -33,7 +33,7 @@ import com.nativenomad.bitebeyond.presentation.common.GoogleButton
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
 
 @Composable
-fun SignUpScreen() { //navController: NavController
+fun SignInScreen() { //navController: NavController
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -54,7 +54,6 @@ fun SignUpScreen() { //navController: NavController
                         endY = Float.POSITIVE_INFINITY
                     )
                 )
-
         )
 
         Column(
@@ -121,8 +120,8 @@ fun SignUpScreen() { //navController: NavController
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SignUpScreenPreview(modifier: Modifier = Modifier) {
+fun SignInScreenPreview(modifier: Modifier = Modifier) {
     BiteBeyondTheme {
-        SignUpScreen()
+        SignInScreen()
     }
 }

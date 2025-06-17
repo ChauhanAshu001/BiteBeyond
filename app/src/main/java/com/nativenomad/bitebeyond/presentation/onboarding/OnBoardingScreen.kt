@@ -38,8 +38,8 @@ fun OnBoardingScreen(
                 when(pagerState.currentPage){
                     0-> listOf("", "Next")
                     1-> listOf("Back", "Next")
-                    2-> listOf("Back", "Next")
-                    3-> listOf("Back","Get Started")
+                    2-> listOf("Back", "Get Started")
+//                    3-> listOf("Back","Get Started")
                     else -> listOf("", "")
                 }
             }
@@ -76,8 +76,9 @@ fun OnBoardingScreen(
                 Spacer(modifier = Modifier.width(2.dp))
                 MyButton(text=buttonState.value[1], onClick = {
                     scope.launch{
-                        if(pagerState.currentPage==3){
+                        if(pagerState.currentPage==2){
                             event(OnBoardingEvent.SaveAppEntry)
+
                         }
                         else{
                             pagerState.animateScrollToPage(page = pagerState.currentPage + 1)

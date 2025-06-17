@@ -13,12 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nativenomad.bitebeyond.R
+import com.nativenomad.bitebeyond.presentation.login.SignUpViewmodel
 
 @Composable
-fun GoogleButton(modifier: Modifier) {
+fun GoogleButton(modifier: Modifier,
+                 viewModel: SignUpViewmodel = hiltViewModel()
+) {
     Button(
-        onClick = { /* Handle Google Sign-In */ },
+        onClick = viewModel::onSignInWithGoogleClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
             contentColor = Color.Black

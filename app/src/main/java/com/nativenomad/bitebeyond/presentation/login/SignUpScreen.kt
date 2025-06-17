@@ -1,6 +1,8 @@
 package com.nativenomad.bitebeyond.presentation.login
 
 import android.content.res.Configuration
+import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,27 +19,67 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.presentation.common.FacebookButton
 import com.nativenomad.bitebeyond.presentation.common.GoogleButton
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SignInScreen(
-    onSignUpClick: (String, String, String) -> Unit,
-    onGoogleSignInClick: () -> Unit,
-    onFacebookSignInClick: () -> Unit,
-    onAlreadyHaveAccountClick: () -> Unit
+fun SignUpScreen(
+//    onSignUpClick: (String, String, String) -> Unit,
+//    onGoogleSignInClick: () -> Unit,
+//    onFacebookSignInClick: () -> Unit,
+//    onAlreadyHaveAccountClick: () -> Unit
+    viewModel:SignUpViewmodel= hiltViewModel()
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val name =viewModel.name.collectAsStateWithLifecycle()
+    val email =viewModel.email.collectAsStateWithLifecycle()
+    val password = viewModel.password.collectAsStateWithLifecycle()
+
+    val uiState = viewModel.uiState.collectAsState()
+    val errorMessage = remember { mutableStateOf<String?>(null) }
+    val loading=remember{ mutableStateOf(false) }
+
+
+    when(uiState.value){
+        is SignUpEvent.Error->{
+            loading.value=false
+            errorMessage.value="Failed"
+        }
+        is SignUpEvent.Loading->{
+            loading.value=true
+            errorMessage.value=null
+        }
+        else->{
+            loading.value=false
+            errorMessage.value=null
+        }
+    }
+
+    val context= LocalContext.current
+    LaunchedEffect(true) {
+        viewModel.navigateEvent.collectLatest {event->
+            when(event){
+                is SignUpNavigationEvent.NavigateToHome->{
+                    Toast.makeText(context,"Signup Successful",Toast.LENGTH_SHORT).show()
+                }
+                else->{
+
+                }
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Background Image
@@ -74,11 +116,21 @@ fun SignInScreen(
 
             // Name Field
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = name.value,
+                onValueChange = { viewModel.onNameChange(it) },
                 label = { Text("Full Name") },
                 leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Name Icon") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = Color.White, // White text
+                    unfocusedTextColor = Color.White,
+                    focusedContainerColor = Color.Transparent, // Transparent background
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedLeadingIconColor = Color.White,
+                    unfocusedLeadingIconColor = Color.White
+                )
 
             )
 
@@ -86,35 +138,69 @@ fun SignInScreen(
 
             // Email Field
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = email.value,
+                onValueChange = { viewModel.onEmailChange(it) },
                 label = { Text("Email") },
                 leadingIcon = { Icon(Icons.Filled.Email, contentDescription = "Email Icon") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = Color.White, // White text
+                    unfocusedTextColor = Color.White,
+                    focusedContainerColor = Color.Transparent, // Transparent background
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedLeadingIconColor = Color.White,
+                    unfocusedLeadingIconColor = Color.White
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Password Field
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = password.value,
+                onValueChange = { viewModel.onPasswordChange(it) },
                 label = { Text("Password") },
                 leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Password Icon") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = Color.White, // White text
+                    unfocusedTextColor = Color.White,
+                    focusedContainerColor = Color.Transparent, // Transparent background
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    focusedLeadingIconColor = Color.White,
+                    unfocusedLeadingIconColor = Color.White
+                )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
+            Text(text=errorMessage.value?:"", color = Color.Red)
 
             // Create Account Button
             Button(
-                onClick = { onSignUpClick(name, email, password) },
+                onClick =  viewModel::onCreateAccountWithEmailClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Create Account")
+                Box(){
+                    AnimatedContent(targetState= loading.value){target->
+                        if(target){
+                            CircularProgressIndicator(
+                                color=Color.White,
+                                modifier=Modifier.size(24.dp)
+                            )
+                        }
+                        else{
+                            Text("Create Account")
+                        }
+                    }
+                }
+
             }
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -138,7 +224,7 @@ fun SignInScreen(
                 text = "Already have an account?",
                 fontSize = 16.sp,
                 color = Color.Blue,
-                modifier = Modifier.clickable { onAlreadyHaveAccountClick() }
+                modifier = Modifier.clickable { TODO() }
             )
         }
     }
@@ -147,16 +233,16 @@ fun SignInScreen(
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SignInScreenPreview() {
+private fun SignUpScreenPreview() {
     BiteBeyondTheme {
-        SignInScreen(
-            onSignUpClick={
-                    name, email, password ->
-                // Handle sign-up logic here
-            },
-            onGoogleSignInClick={},
-            onFacebookSignInClick={},
-            onAlreadyHaveAccountClick={}
+        SignUpScreen(
+//            onSignUpClick={
+//                    name, email, password ->
+//                // Handle sign-up logic here
+//            },
+//            onGoogleSignInClick={},
+//            onFacebookSignInClick={},
+//            onAlreadyHaveAccountClick={}
         )
     }
 }

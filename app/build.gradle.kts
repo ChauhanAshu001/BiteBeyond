@@ -10,6 +10,9 @@ plugins {
     id("kotlin-kapt") // Apply the Kapt plugin
     alias(libs.plugins.hilt.android) // Hilt Gradle plugin
 
+    //firebase
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -114,4 +117,16 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)       // Room Kapt compiler
+
+
+    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
+    implementation("com.google.firebase:firebase-auth")
+
+    //firebase dependencies for google authentication
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    val credentialsManagerVersion="1.5.0-alpha05"
+    implementation("androidx.credentials:credentials:$credentialsManagerVersion")
+    implementation("androidx.credentials:credentials-play-services-auth:$credentialsManagerVersion")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
 }
