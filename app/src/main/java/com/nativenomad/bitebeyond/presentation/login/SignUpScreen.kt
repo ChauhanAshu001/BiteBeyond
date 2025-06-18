@@ -37,10 +37,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpScreen(
-//    onSignUpClick: (String, String, String) -> Unit,
-//    onGoogleSignInClick: () -> Unit,
-//    onFacebookSignInClick: () -> Unit,
-//    onAlreadyHaveAccountClick: () -> Unit
     viewModel:SignUpViewmodel= hiltViewModel()
 ) {
     val name =viewModel.name.collectAsStateWithLifecycle()
@@ -224,7 +220,7 @@ fun SignUpScreen(
                 text = "Already have an account?",
                 fontSize = 16.sp,
                 color = Color.Blue,
-                modifier = Modifier.clickable { TODO() }
+                modifier = Modifier.clickable { /*TODO()*/ }
             )
         }
     }
@@ -235,14 +231,6 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     BiteBeyondTheme {
-        SignUpScreen(
-//            onSignUpClick={
-//                    name, email, password ->
-//                // Handle sign-up logic here
-//            },
-//            onGoogleSignInClick={},
-//            onFacebookSignInClick={},
-//            onAlreadyHaveAccountClick={}
-        )
+        SignUpScreen()
     }
 }

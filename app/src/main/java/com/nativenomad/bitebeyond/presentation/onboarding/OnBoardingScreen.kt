@@ -78,6 +78,7 @@ fun OnBoardingScreen(
                     scope.launch{
                         if(pagerState.currentPage==2){
                             event(OnBoardingEvent.SaveAppEntry)
+                            event(OnBoardingEvent.NavigateToSignUp) //to navigate to signup screen
 
                         }
                         else{

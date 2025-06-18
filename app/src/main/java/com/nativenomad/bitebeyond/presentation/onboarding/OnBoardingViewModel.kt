@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.AppEntryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -11,10 +13,17 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases
 ): ViewModel() {
+    private val _navigationEvent = MutableSharedFlow<OnBoardingNavigationEvent>()
+    val navigationEvent = _navigationEvent.asSharedFlow()
     fun onEvent(event:OnBoardingEvent){
         when(event){
             is OnBoardingEvent.SaveAppEntry->{
                 saveAppEntry()
+            }
+            is OnBoardingEvent.NavigateToSignUp -> {
+                viewModelScope.launch {
+                    _navigationEvent.emit(OnBoardingNavigationEvent.NavigateToSignUpScreen)
+                }
             }
         }
     }
