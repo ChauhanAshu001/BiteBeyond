@@ -1,12 +1,18 @@
 package com.nativenomad.bitebeyond.presentation.login
 
+import android.app.Activity
 import android.app.Application
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.facebook.CallbackManager
 import com.nativenomad.bitebeyond.domain.manager.AuthManager
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
 import com.nativenomad.bitebeyond.models.AuthResponse
+import com.nativenomad.bitebeyond.presentation.navgraph.NavGraph
+import com.nativenomad.bitebeyond.presentation.navgraph.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +20,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,6 +76,35 @@ class SignUpViewmodel@Inject constructor(
                 _uiState.value=SignUpEvent.Error
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onSignInWithFacebookClick(activity: ComponentActivity,
+                                  callbackManager: CallbackManager
+    ){
+        _uiState.value=SignUpEvent.Loading
+        loginUseCases.signInWithFacebook(activity,callbackManager).onEach{response->
+            if(response is AuthResponse.Success) {
+                _uiState.value=SignUpEvent.Success
+                _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+            }
+            else{
+                _uiState.value=SignUpEvent.Error
+            }
+        }.launchIn(viewModelScope)
+    }
+    fun onEvent(event:SignUpNavigationEvent){
+        when(event){
+            is SignUpNavigationEvent.NavigateToLogin->{
+                viewModelScope.launch{
+                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToLogin)
+                }
+            }
+            is SignUpNavigationEvent.NavigateToHome->{
+                viewModelScope.launch {
+                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+                }
+            }
+        }
     }
 
 }

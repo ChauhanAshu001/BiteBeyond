@@ -12,15 +12,15 @@ data class Page(
 val pages=listOf(
     Page(title="Order For Food",
         description = "Crave it? Get it! Order your favorite meals in minutes with fresh flavors, fast delivery, and zero hassle.",
-        image= R.drawable.onboarding1),
+        image= R.drawable.burger1),
 
     Page(title=" Not your regular food app",
         description = "Use the AI to choose food when in rush ",
-        image=R.drawable.bot),
+        image=R.drawable.burger2),
 
     Page(title="You ask we prepare",
         description = "All the best restaurants with their top menu waiting for you, they can’t wait for your order!!",
-        image = R.drawable.burger),
+        image = R.drawable.burger3),
 
 //    Page(title="Let's GO",
 //        description = "",

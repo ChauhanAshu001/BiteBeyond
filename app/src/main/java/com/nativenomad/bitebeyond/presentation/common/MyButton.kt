@@ -7,8 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.nativenomad.bitebeyond.R
 
 @Composable
 fun MyButton(
@@ -16,7 +18,7 @@ fun MyButton(
     onClick:()->Unit,
 ){
     Button(onClick=onClick,colors= ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.primary,
+        containerColor = colorResource(R.color.darkOrange),
         contentColor = Color.White
     ),
         shape= RoundedCornerShape(size= 10.dp)

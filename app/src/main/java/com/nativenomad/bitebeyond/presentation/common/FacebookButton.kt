@@ -1,5 +1,6 @@
 package com.nativenomad.bitebeyond.presentation.common
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -10,14 +11,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.facebook.CallbackManager
+import com.nativenomad.bitebeyond.MainActivity
 import com.nativenomad.bitebeyond.R
+import com.nativenomad.bitebeyond.presentation.login.SignUpViewmodel
 
 @Composable
-fun FacebookButton(modifier: Modifier) {
+fun FacebookButton(modifier: Modifier,
+                   viewModel: SignUpViewmodel = hiltViewModel(),
+                   callbackManager: CallbackManager,
+) {
+    val context = LocalContext.current
+//    val activity = context as Activity
+    val activity = context as MainActivity
+
     Button(
-        onClick = { /* Handle Facebook Sign-In */ },
+        onClick = {
+            viewModel.onSignInWithFacebookClick(activity, callbackManager)
+        },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF1877F2),
             contentColor = Color.White

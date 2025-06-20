@@ -1,19 +1,26 @@
 package com.nativenomad.bitebeyond.data.manager
 
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.domain.manager.AuthManager
 import com.nativenomad.bitebeyond.models.AuthResponse
-import com.nativenomad.bitebeyond.utils.Constants.web_client_id
+import com.nativenomad.bitebeyond.utils.Constants.google_web_client_id
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -65,7 +72,7 @@ class AuthManagerImpl(val context : Context):AuthManager {
         return callbackFlow {
             val googleIdOption=GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)  //Allows any account, not just pre-authorized ones.
-                .setServerClientId(web_client_id) //Uses the OAuth 2.0 client ID stored in string.xml for authentication.
+                .setServerClientId(google_web_client_id) //Uses the OAuth 2.0 client ID stored in string.xml for authentication.
                 .setAutoSelectEnabled(false) //Disables automatic account selection.
                 .setNonce(createNonce())  //Generates a unique nonce for security
                 .build()
@@ -114,6 +121,67 @@ class AuthManagerImpl(val context : Context):AuthManager {
             }
             awaitClose() //Ensures the flow properly cleans up when no longer needed.
         }
+    }
+
+    override fun signInWithFacebook(activity: ComponentActivity, callbackManager: CallbackManager): Flow<AuthResponse> {
+        return callbackFlow {
+            val loginManager = LoginManager.getInstance()
+
+            try {
+
+                loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        result.accessToken.let { accessToken ->
+                            val firebaseCredential = FacebookAuthProvider.getCredential(accessToken.token)
+                            auth.signInWithCredential(firebaseCredential)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        trySend(AuthResponse.Success)
+                                    } else {
+                                        trySend(
+                                            AuthResponse.Error(
+                                                message = task.exception?.message ?: "Firebase sign-in failed"
+                                            )
+                                        )
+                                    }
+                                }
+                        }
+                    }
+
+                    override fun onCancel() {
+                        trySend(AuthResponse.Error("Facebook Sign-In Cancelled"))
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        trySend(AuthResponse.Error(error.message ?: "Facebook Error"))
+                    }
+                })
+
+                loginManager.logInWithReadPermissions(activity, callbackManager,listOf("public_profile", "email"))
+            } catch (e: Exception) {
+                trySend(AuthResponse.Error(e.message ?: "Facebook Auth Exception"))
+            }
+
+            awaitClose()  // Ensures cleanup when no longer needed
+        }
+//        LoginManager.getInstance().registerCallback(callbackManager,
+//            object:FacebookCallback<LoginResult>{
+//                override fun onSuccess(loginResult: LoginResult) {
+//                    TODO("Not yet implemented")
+//                }
+//                override fun onCancel() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onError(exception: FacebookException) {
+//                    trySend(AuthResponse.Error(exception.message ?: "Facebook Error"))
+//                }
+//            })
+//        LoginManager.getInstance().logInWithReadPermissions(
+//            activity,
+//            callbackManager,
+//            listOf("public_profile", "email"),
+//        )
     }
 
 }

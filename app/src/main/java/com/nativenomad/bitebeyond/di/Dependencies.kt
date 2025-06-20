@@ -12,6 +12,7 @@ import com.nativenomad.bitebeyond.domain.usecases.app_entry.SaveAppEntry
 import com.nativenomad.bitebeyond.domain.usecases.login.CreateAccountWithEmail
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginWithEmail
+import com.nativenomad.bitebeyond.domain.usecases.login.SignInWithFacebook
 import com.nativenomad.bitebeyond.domain.usecases.login.SignInWithGoogle
 import dagger.Module
 import dagger.Provides
@@ -55,7 +56,8 @@ object Dependencies {
         return LoginUseCases(
             createAccountWithEmail = CreateAccountWithEmail(authManager),
             loginWithEmail = LoginWithEmail(authManager),
-            signInWithGoogle = SignInWithGoogle(authManager)
+            signInWithGoogle = SignInWithGoogle(authManager) ,
+            signInWithFacebook= SignInWithFacebook(authManager)
         )
     }
 }

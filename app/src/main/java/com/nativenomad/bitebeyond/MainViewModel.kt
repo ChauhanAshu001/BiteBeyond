@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.AppEntryUseCases
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
 import com.nativenomad.bitebeyond.presentation.navgraph.Routes
@@ -21,11 +22,15 @@ class MainViewModel@Inject constructor(
     var startDestination by mutableStateOf(Routes.AppStartNavigation.route)
         private set
     var splashCondition by mutableStateOf(true)
+    val auth = FirebaseAuth.getInstance()
 
     init{
-        appEntryUseCases.readAppEntry().onEach{shouldStartFromOnBoardingScreen->
-            if(shouldStartFromOnBoardingScreen){
+        appEntryUseCases.readAppEntry().onEach{shouldStartFromSignupScreen->
+            if(shouldStartFromSignupScreen){
                 startDestination=Routes.SignUpNavigation.route
+                if (auth.currentUser != null) {
+                    startDestination = Routes.HomeScreenNavigation.route
+                }
             }
             else{
 

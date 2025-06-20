@@ -13,7 +13,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.google.accompanist.systemuicontroller.SystemUiController
+import com.facebook.FacebookSdk
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nativenomad.bitebeyond.presentation.navgraph.NavGraph
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
@@ -25,6 +25,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FacebookSdk.setClientToken("ccebd503d2f20bbb2edef55732fc8138")
+        FacebookSdk.sdkInitialize(applicationContext)
+        FacebookSdk.fullyInitialize()
+//        AppEventsLogger.activateApp(application)
+//        //above code authenticate the app with facebook using app id. It's standard code
+
         enableEdgeToEdge()
         installSplashScreen().apply{
             setKeepOnScreenCondition{

@@ -1,6 +1,7 @@
 package com.nativenomad.bitebeyond.presentation.onboarding
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,10 +30,8 @@ import kotlinx.coroutines.launch
 fun OnBoardingScreen(
     event: (OnBoardingEvent) -> Unit    //event is a lambda function
 ) {
-    Column(modifier= Modifier.fillMaxSize()){
-        val pagerState= rememberPagerState(initialPage = 0){
-            pages.size
-        }
+    Column(modifier = Modifier.fillMaxSize()) {
+        val pagerState = rememberPagerState(initialPage = 0) { pages.size }
         val buttonState= remember{
             derivedStateOf {
                 when(pagerState.currentPage){
@@ -44,51 +43,53 @@ fun OnBoardingScreen(
                 }
             }
         }
-        HorizontalPager(state=pagerState) {index->
-            OnBoardingPage(page=pages[index])
-
+        Box(modifier = Modifier.weight(1f)) {
+            HorizontalPager(state = pagerState) { index ->
+                OnBoardingPage(page = pages[index])
+            }
         }
 
-        Spacer(modifier= Modifier.weight(1f))
-
-        Row(modifier= Modifier
-            .fillMaxWidth()
-            .padding(horizontal = MediumPadding2)
-            .navigationBarsPadding(),
+        // Buttons stay visible now
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MediumPadding2)
+                .navigationBarsPadding(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically){
-
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             PageIndicator(
-                modifier= Modifier.width(PageIndicatorWidth),
+                modifier = Modifier.width(PageIndicatorWidth),
                 pageSize = pages.size,
                 selectedPage = pagerState.currentPage
             )
-            Row(verticalAlignment = Alignment.CenterVertically){
-                val scope= rememberCoroutineScope()
-                if(buttonState.value[0].isNotEmpty()){
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val scope = rememberCoroutineScope()
+                if (buttonState.value[0].isNotEmpty()) {
                     MyButton(
-                        text=buttonState.value[0],
+                        text = buttonState.value[0],
                         onClick = {
-                            scope.launch{ pagerState.animateScrollToPage(page = pagerState.currentPage - 1) }
+                            scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                         }
                     )
                 }
                 Spacer(modifier = Modifier.width(2.dp))
-                MyButton(text=buttonState.value[1], onClick = {
-                    scope.launch{
-                        if(pagerState.currentPage==2){
-                            event(OnBoardingEvent.SaveAppEntry)
-                            event(OnBoardingEvent.NavigateToSignUp) //to navigate to signup screen
-
-                        }
-                        else{
-                            pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+                MyButton(
+                    text = buttonState.value[1],
+                    onClick = {
+                        scope.launch {
+                            if (pagerState.currentPage == 2) {
+                                event(OnBoardingEvent.SaveAppEntry)
+                                event(OnBoardingEvent.NavigateToSignUp)
+                            } else {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
                         }
                     }
-                })
+                )
             }
         }
+    }
 
-
-    } //Column ends here
 }

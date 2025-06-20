@@ -119,8 +119,9 @@ dependencies {
     kapt(libs.androidx.room.compiler)       // Room Kapt compiler
 
 
-    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))  //Firebase BOM ensures all Firebase libraries remain at compatible versions. Due to this you don't need to specify version numbers of firebase libraries you import further
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     //firebase dependencies for google authentication
     implementation("com.google.android.gms:play-services-auth:21.2.0")
@@ -129,4 +130,9 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:$credentialsManagerVersion")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+    //facebook login
+
+    implementation("com.facebook.android:facebook-login:18.0.3")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation ("com.facebook.android:facebook-android-sdk:17.0.2")
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -16,19 +17,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.facebook.CallbackManager
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.presentation.common.FacebookButton
 import com.nativenomad.bitebeyond.presentation.common.GoogleButton
@@ -37,7 +41,8 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpScreen(
-    viewModel:SignUpViewmodel= hiltViewModel()
+    viewModel:SignUpViewmodel= hiltViewModel(),
+    event:(SignUpNavigationEvent)->Unit
 ) {
     val name =viewModel.name.collectAsStateWithLifecycle()
     val email =viewModel.email.collectAsStateWithLifecycle()
@@ -47,6 +52,15 @@ fun SignUpScreen(
     val errorMessage = remember { mutableStateOf<String?>(null) }
     val loading=remember{ mutableStateOf(false) }
 
+    val callbackManager = remember { CallbackManager.Factory.create() }
+
+
+//    val callbackManager = remember { CallbackManager.Factory.create() } //for facebook authentication
+//    val facebookLoginLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.StartActivityForResult()
+//    ) { result ->
+//        callbackManager.onActivityResult(result.resultCode, result.data)
+//    }
 
     when(uiState.value){
         is SignUpEvent.Error->{
@@ -77,26 +91,9 @@ fun SignUpScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Background Image
-        Image(
-            painter = painterResource(id=R.drawable.background),
-            contentDescription = "Background Image",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillHeight
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Black, Color.Transparent),
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
-                    )
-                )
-
-        )
+    Box(modifier = Modifier.fillMaxSize()
+        .background(Color.White)
+        .padding(top = 70.dp)) {
 
         Column(
             modifier = Modifier
@@ -104,9 +101,22 @@ fun SignUpScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = "Create Account", fontSize = 24.sp, color = Color.White)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = "Create your new",
+                    color = Color.Black,
+                    fontSize = 28.sp
+                )
+                Text(
+                    text = "account",
+                    color = Color.Black,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -117,15 +127,16 @@ fun SignUpScreen(
                 label = { Text("Full Name") },
                 leadingIcon = { Icon(Icons.Filled.Person, contentDescription = "Name Icon") },
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.White, // White text
-                    unfocusedTextColor = Color.White,
-                    focusedContainerColor = Color.Transparent, // Transparent background
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLeadingIconColor = Color.White,
-                    unfocusedLeadingIconColor = Color.White
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black,
+                    focusedLeadingIconColor = Color.Black,
+                    unfocusedLeadingIconColor = Color.Black
                 )
 
             )
@@ -140,15 +151,16 @@ fun SignUpScreen(
                 leadingIcon = { Icon(Icons.Filled.Email, contentDescription = "Email Icon") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.White, // White text
-                    unfocusedTextColor = Color.White,
-                    focusedContainerColor = Color.Transparent, // Transparent background
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLeadingIconColor = Color.White,
-                    unfocusedLeadingIconColor = Color.White
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black,
+                    focusedLeadingIconColor = Color.Black,
+                    unfocusedLeadingIconColor = Color.Black
                 )
             )
 
@@ -163,15 +175,16 @@ fun SignUpScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.White, // White text
-                    unfocusedTextColor = Color.White,
-                    focusedContainerColor = Color.Transparent, // Transparent background
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
-                    focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.White,
-                    focusedLeadingIconColor = Color.White,
-                    unfocusedLeadingIconColor = Color.White
+                    focusedLabelColor = Color.Black,
+                    unfocusedLabelColor = Color.Black,
+                    focusedLeadingIconColor = Color.Black,
+                    unfocusedLeadingIconColor = Color.Black
                 )
             )
 
@@ -181,10 +194,15 @@ fun SignUpScreen(
             // Create Account Button
             Button(
                 onClick =  viewModel::onCreateAccountWithEmailClick,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = colorResource(R.color.white),
+                    containerColor = colorResource(R.color.lightOrange)
+
+                )
             ) {
                 Box(){
-                    AnimatedContent(targetState= loading.value){target->
+                    AnimatedContent(targetState= loading.value){ target->
                         if(target){
                             CircularProgressIndicator(
                                 color=Color.White,
@@ -209,7 +227,7 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Sign in with Facebook
-                FacebookButton(modifier = Modifier.weight(1f))
+                FacebookButton(modifier = Modifier.weight(1f),callbackManager=callbackManager)
             }
 
 
@@ -220,7 +238,7 @@ fun SignUpScreen(
                 text = "Already have an account?",
                 fontSize = 16.sp,
                 color = Color.Blue,
-                modifier = Modifier.clickable { /*TODO()*/ }
+                modifier = Modifier.clickable { event(SignUpNavigationEvent.NavigateToLogin) }
             )
         }
     }
@@ -231,6 +249,6 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     BiteBeyondTheme {
-        SignUpScreen()
+        SignUpScreen(event={})
     }
 }
