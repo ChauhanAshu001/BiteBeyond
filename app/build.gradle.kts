@@ -123,16 +123,25 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-auth-ktx")
 
-    //firebase dependencies for google authentication
+    //firebase dependencies
+
+    //for google authentication
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     val credentialsManagerVersion="1.5.0-alpha05"
     implementation("androidx.credentials:credentials:$credentialsManagerVersion")
     implementation("androidx.credentials:credentials-play-services-auth:$credentialsManagerVersion")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+    //for realtime database
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
     //facebook login
 
     implementation("com.facebook.android:facebook-login:18.0.3")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation ("com.facebook.android:facebook-android-sdk:17.0.2")
+
+    //dependency to use location
+    implementation("com.google.android.gms:play-services-location:21.0.0")
+
+
 }

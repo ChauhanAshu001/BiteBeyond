@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BiteBeyond</string>
+    <string name="facebook_app_id">722883076773019</string>
+    <string name="facebook_client_token">ccebd503d2f20bbb2edef55732fc8138</string>
+    <string name="fb_login_protocol_scheme">fb722883076773019</string>
+
 </resources>

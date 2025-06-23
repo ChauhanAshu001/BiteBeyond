@@ -29,7 +29,7 @@ class SignUpViewmodel@Inject constructor(
 ):ViewModel() {
 
     private val _uiState= MutableStateFlow<SignUpEvent>(SignUpEvent.Nothing)
-    val uiState=_uiState.asStateFlow()
+    val uiState=_uiState.asStateFlow() //this makes it immutable hence this variable can be exposed to ui while ensuring there's no avoid accidental changes to _uiState
     /*
     The .asStateFlow() function in Kotlin is used to convert a MutableStateFlow into a read-only StateFlow.
     This ensures that the state can be observed but not modified externally, maintaining encapsulation.

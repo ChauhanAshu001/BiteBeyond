@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,13 +65,7 @@ fun NavGraph(
                     viewModel.navigationEvent.collectLatest { event ->
                         when (event) {
                             is OnBoardingNavigationEvent.NavigateToSignUpScreen -> {
-                                navController.navigate(Routes.SignUpNavigation.route) {
-                                    // Optional: Pop OnBoarding from back stack so user can't go back to it
-//                                    popUpTo(Routes.OnBoardingScreen.route) {
-//                                        inclusive = true
-//                                    } //for this I am going to do this in Main View Model
-
-                                }
+                                navController.navigate(Routes.SignUpNavigation.route)
                             }
                         }
                     }
@@ -92,7 +85,7 @@ fun NavGraph(
                                 navController.navigate(Routes.SignInScreen.route)
                             }
                             is SignUpNavigationEvent.NavigateToHome->{
-                                navController.navigate(Routes.HomeScreen.route){
+                                navController.navigate(Routes.HomeScreenNavigation.route){
                                     popUpTo(Routes.SignUpScreen.route) {
                                         inclusive = true
                                     }
@@ -110,9 +103,7 @@ fun NavGraph(
                 SignInScreen()
 
             }
-            composable(route=Routes.HomeScreen.route){
-                HomeScreen()
-            }
+
         }
         navigation(route=Routes.HomeScreenNavigation.route, startDestination = Routes.HomeScreen.route){
             composable(route=Routes.HomeScreen.route){

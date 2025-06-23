@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.facebook.FacebookSdk
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.FirebaseApp
 import com.nativenomad.bitebeyond.presentation.navgraph.NavGraph
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +30,10 @@ class MainActivity : ComponentActivity() {
         FacebookSdk.setClientToken("ccebd503d2f20bbb2edef55732fc8138")
         FacebookSdk.sdkInitialize(applicationContext)
         FacebookSdk.fullyInitialize()
-//        AppEventsLogger.activateApp(application)
 //        //above code authenticate the app with facebook using app id. It's standard code
+
+        //Initialize Firebase
+        FirebaseApp.initializeApp(this)
 
         enableEdgeToEdge()
         installSplashScreen().apply{
