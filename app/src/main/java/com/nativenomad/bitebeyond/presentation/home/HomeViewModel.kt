@@ -106,4 +106,10 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun navigateToRestaurantDetail(restaurantName: String, distanceKm: String, imageUrl: String,rating:Double) {
+        viewModelScope.launch {
+            _navigateEvent.emit(HomeScreenNavigationEvent.navigateToRestaurantDetailsScreen(restaurantName,distanceKm, imageUrl,rating))
+        }
+    }
 }

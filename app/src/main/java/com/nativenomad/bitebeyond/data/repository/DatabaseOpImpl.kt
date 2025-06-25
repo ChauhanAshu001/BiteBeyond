@@ -10,6 +10,8 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import com.nativenomad.bitebeyond.domain.repository.DatabaseOp
 import com.nativenomad.bitebeyond.models.Category
+import com.nativenomad.bitebeyond.models.FoodItem
+import com.nativenomad.bitebeyond.models.Offers
 import com.nativenomad.bitebeyond.models.Restaurants
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +26,12 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
 
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val categoryList = snapshot.children.mapNotNull {
-                    it.getValue(Category::class.java)
+                val categoryList = mutableListOf<Category>()
+                for (child in snapshot.children) {
+                    val category = child.getValue(Category::class.java)
+                    if (category != null) {
+                        categoryList.add(category)
+                    }
                 }
                 trySend(categoryList)
             }
@@ -45,8 +51,12 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
 
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val restaurantList = snapshot.children.mapNotNull {
-                    it.getValue(Restaurants::class.java)
+                val restaurantList = mutableListOf<Restaurants>()
+                for (child in snapshot.children) {
+                    val restaurant = child.getValue(Restaurants::class.java)
+                    if (restaurant != null) {
+                        restaurantList.add(restaurant)
+                    }
                 }
                 trySend(restaurantList)
             }
@@ -59,5 +69,56 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
 
         ref.addValueEventListener(listener)
         awaitClose { ref.removeEventListener(listener) }
+    }
+
+    override suspend fun getMenu(restaurantName: String): Flow<List<FoodItem>> {
+        return callbackFlow {
+            val menuRef = database.getReference("Restaurants")
+                .child(restaurantName).child("menu")
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list = snapshot.children.mapNotNull {
+                        val name = it.child("name").getValue<String>() ?: return@mapNotNull null
+                        val cost = it.child("cost").getValue<String>()  ?: return@mapNotNull null
+                        val imageUrl = it.child("imageUrl").getValue<String>()  ?: return@mapNotNull null
+                        FoodItem(name, cost, imageUrl)
+                    }
+                    trySend(list).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            menuRef.addValueEventListener(listener)
+            awaitClose { menuRef.removeEventListener(listener) }
+        }
+
+
+    }
+
+    override suspend fun getOffers(restaurantName: String): Flow<List<Offers>> {
+        return callbackFlow {
+            val offersRef = database.getReference("Restaurants")
+                .child(restaurantName).child("Offers")
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val list = snapshot.children.mapNotNull {
+                        val offerDescription = it.child("offerDescription").getValue<String>() ?: return@mapNotNull null
+                        val promoCode = it.child("promoCode").getValue<String>()  ?: return@mapNotNull null
+                        Offers(offerDescription =offerDescription,promoCode=promoCode)
+                    }
+                    trySend(list).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            offersRef.addValueEventListener(listener)
+            awaitClose { offersRef.removeEventListener(listener) }
+        }
     }
 }

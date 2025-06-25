@@ -29,7 +29,7 @@ class MainViewModel@Inject constructor(
             if(shouldStartFromSignupScreen){
                 startDestination=Routes.SignUpNavigation.route
                 if (auth.currentUser != null) {
-                    startDestination = Routes.HomeScreenNavigation.route
+                    startDestination = Routes.MainScreenNavigation.route
                 }
             }
             else{

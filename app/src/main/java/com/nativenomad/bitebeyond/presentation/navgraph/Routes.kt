@@ -6,6 +6,9 @@ sealed class Routes(val route:String) {
     object SignInScreen : Routes(route="signInScreen")
     object SignUpNavigation : Routes(route="signUpNavigation")
     object SignUpScreen : Routes(route="signUpScreen")
-    object HomeScreen : Routes(route="homeScreen")
-    object HomeScreenNavigation:Routes(route="HomeScreenNavigation")
+    object MainScreen:Routes(route="mainScreen")
+    object MainScreenNavigation:Routes(route="mainScreenNavigation")
+
+    object RestaurantDetailScreen:Routes(route="restaurantDetailScreen")
+
 }

@@ -15,6 +15,8 @@ import com.nativenomad.bitebeyond.domain.usecases.app_entry.ReadAppEntry
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.SaveAppEntry
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetCategories
+import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetMenu
+import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetOffers
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetRestaurants
 import com.nativenomad.bitebeyond.domain.usecases.login.CreateAccountWithEmail
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
@@ -85,7 +87,9 @@ object Dependencies {
     ):DatabaseOpUseCases{
         return DatabaseOpUseCases(
             getCategories = GetCategories(databaseOp),
-            getRestaurants = GetRestaurants(databaseOp)
+            getRestaurants = GetRestaurants(databaseOp),
+            getMenu= GetMenu(databaseOp),
+            getOffers = GetOffers(databaseOp)
         )
     }
 
