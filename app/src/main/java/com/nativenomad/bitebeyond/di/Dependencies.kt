@@ -1,14 +1,15 @@
 package com.nativenomad.bitebeyond.di
 
 import android.app.Application
-import com.google.android.gms.auth.api.Auth
 import com.nativenomad.bitebeyond.data.manager.AuthManagerImpl
 import com.nativenomad.bitebeyond.data.manager.LocalUserManagerImpl
 import com.nativenomad.bitebeyond.data.manager.PermissionManagerImpl
+import com.nativenomad.bitebeyond.data.repository.CartRepositoryImpl
 import com.nativenomad.bitebeyond.data.repository.DatabaseOpImpl
 import com.nativenomad.bitebeyond.domain.manager.AuthManager
 import com.nativenomad.bitebeyond.domain.manager.LocalUserManager
 import com.nativenomad.bitebeyond.domain.manager.PermissionManager
+import com.nativenomad.bitebeyond.domain.repository.CartRepository
 import com.nativenomad.bitebeyond.domain.repository.DatabaseOp
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.AppEntryUseCases
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.ReadAppEntry
@@ -17,6 +18,7 @@ import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetCategories
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetMenu
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetOffers
+import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetPromoCodeRestaurantMap
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetRestaurants
 import com.nativenomad.bitebeyond.domain.usecases.login.CreateAccountWithEmail
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
@@ -89,7 +91,8 @@ object Dependencies {
             getCategories = GetCategories(databaseOp),
             getRestaurants = GetRestaurants(databaseOp),
             getMenu= GetMenu(databaseOp),
-            getOffers = GetOffers(databaseOp)
+            getOffers = GetOffers(databaseOp),
+            getPromoCodeRestaurantMap = GetPromoCodeRestaurantMap(databaseOp)
         )
     }
 
@@ -119,4 +122,16 @@ object Dependencies {
     fun provideGetUserLocationNameClass():GetUserLocationNameClass{
         return GetUserLocationNameClass()
     }
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(application: Application):CartRepository{
+        return CartRepositoryImpl(
+            application = application
+
+        )
+    }
+    /*I didn't use that useCases way for cart because it had stateflows like final amount,cartItems etc to manage which were only in CartrepositoryImpl
+    so we can't just inject a cartRepositoryUse cases into cartViewModel
+    */
 }

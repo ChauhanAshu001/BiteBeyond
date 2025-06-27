@@ -1,12 +1,8 @@
-package com.nativenomad.bitebeyond.presentation.restaurantDetails.components
+package com.nativenomad.bitebeyond.presentation.cart.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.nativenomad.bitebeyond.models.FoodItem
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,19 +14,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -38,53 +30,45 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.cart.CartViewModel
+import com.nativenomad.bitebeyond.models.FoodItem
+import com.nativenomad.bitebeyond.presentation.cart.CartEvents
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailEvents
 
 @Composable
-fun FoodItemCard(food:FoodItem,
-                 onEvent:(RestaurantDetailEvents,FoodItem)->Unit) {
+fun CartFoodItemCard(food:FoodItem,
+                     quantity:Int,
+                     onEvent:(CartEvents,FoodItem)->Unit) {
 
-    val count= remember { mutableStateOf(0) }
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 4.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(6.dp),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+                .padding(16.dp)
+                .fillMaxWidth()
         ) {
-            // Food Image
             AsyncImage(
                 model = food.imageUrl,
-                contentDescription = food.name,
-                contentScale = ContentScale.Crop,
+                contentDescription = null,
                 modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(12.dp))
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Name and Price
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 4.dp)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = food.name,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
+
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = food.cost,
@@ -92,10 +76,7 @@ fun FoodItemCard(food:FoodItem,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-
             Spacer(modifier = Modifier.width(8.dp))
-
-            // Quantity + Add to Cart
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
@@ -107,33 +88,22 @@ fun FoodItemCard(food:FoodItem,
                         .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
                         .padding(horizontal = 4.dp, vertical = 2.dp)
                 ) {
-                    IconButton(onClick = {onEvent(RestaurantDetailEvents.MinusClicked,food)
-                                        count.value--
-                    }) {
+                    IconButton(onClick = { onEvent(CartEvents.MinusClicked, food) }) {
                         Icon(Icons.Default.Remove, contentDescription = "Minus")
                     }
                     Text(
-                        text=count.value.toString(),
+                        text = quantity.toString(),
                         modifier = Modifier.width(24.dp),
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium
                     )
-                    IconButton(onClick = { onEvent(RestaurantDetailEvents.PlusClicked,food)
-                                   count.value++
-                    }) {
+                    IconButton(onClick = { onEvent(CartEvents.PlusClicked, food) }) {
                         Icon(Icons.Default.Add, contentDescription = "Plus")
                     }
                 }
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-//               Button(
-//                    onClick = { cartViewModel.addItem(food)},
-//                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-//                    shape = RoundedCornerShape(8.dp)
-//                ) {
-//                    Text(text = "Add to cart", style = MaterialTheme.typography.labelLarge)
-//                }
             }
         }
     }

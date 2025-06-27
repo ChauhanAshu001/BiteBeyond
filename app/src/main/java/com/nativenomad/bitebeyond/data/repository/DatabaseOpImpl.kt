@@ -81,7 +81,7 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
                         val name = it.child("name").getValue<String>() ?: return@mapNotNull null
                         val cost = it.child("cost").getValue<String>()  ?: return@mapNotNull null
                         val imageUrl = it.child("imageUrl").getValue<String>()  ?: return@mapNotNull null
-                        FoodItem(name, cost, imageUrl)
+                        FoodItem(name, cost, imageUrl,restaurantName)
                     }
                     trySend(list).isSuccess
                 }
@@ -119,6 +119,38 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
 
             offersRef.addValueEventListener(listener)
             awaitClose { offersRef.removeEventListener(listener) }
+        }
+    }
+
+    override suspend fun getPromoCodeRestaurantMap(): Flow<MutableMap<String, String>> {
+        return callbackFlow {
+            val restaurantsRef = database.getReference("Restaurants")
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val result = mutableMapOf<String, String>()
+
+                    for (restaurantSnap in snapshot.children) {
+                        val restaurantName = restaurantSnap.child("name").getValue<String>().toString()
+                        val offersSnap = restaurantSnap.child("Offers")
+
+                        for (offerSnap in offersSnap.children) {
+                            val promoCode = offerSnap.child("promoCode").getValue<String>()?.uppercase()
+                            if (promoCode != null) {
+                                result[promoCode] = restaurantName
+                            }
+                        }
+                    }
+
+                    trySend(result).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            restaurantsRef.addValueEventListener(listener)
+            awaitClose { restaurantsRef.removeEventListener(listener) }
         }
     }
 }

@@ -12,4 +12,5 @@ interface DatabaseOp {
     suspend fun getRestaurants(): Flow<List<Restaurants>>
     suspend fun getMenu(restaurantName: String):Flow<List<FoodItem>>
     suspend fun getOffers(restaurantName: String):Flow<List<Offers>>
+    suspend fun getPromoCodeRestaurantMap():Flow<MutableMap<String,String>>
 }

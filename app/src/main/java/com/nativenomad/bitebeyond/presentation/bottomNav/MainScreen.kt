@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.models.NavItems
+import com.nativenomad.bitebeyond.presentation.cart.CartScreen
 import com.nativenomad.bitebeyond.presentation.home.HomeScreen
 import com.nativenomad.bitebeyond.presentation.profile.ProfileScreen
 
@@ -75,7 +76,7 @@ fun ContentScreen(modifier: Modifier=Modifier, screen: String,navController: Nav
     when(screen){
         "Home"->HomeScreen(navController=navController)
 //        "AI"->AiScreen()
-//        "Cart"->CartScreen()
+        "Cart"->CartScreen()
         "Profile"->ProfileScreen()
 
     }

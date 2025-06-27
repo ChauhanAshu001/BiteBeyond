@@ -116,7 +116,7 @@ fun RestaurantDetailsScreen(
                 }
             }
             items(menuItems.value) { food ->
-                FoodItemCard(food)
+                FoodItemCard(food=food, onEvent = restaurantDetailViewModel::onEvent)
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
