@@ -45,6 +45,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -52,9 +55,9 @@ android {
         compose = true
     }
 
-//    kapt {
-//        correctErrorTypes = true
-//    }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -144,6 +147,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.0")
     implementation("androidx.compose.material:material-icons-extended:1.6.1")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
+
 
 
 }
+

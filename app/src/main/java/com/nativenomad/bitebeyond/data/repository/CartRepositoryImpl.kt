@@ -3,12 +3,18 @@ package com.nativenomad.bitebeyond.data.repository
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import com.nativenomad.bitebeyond.data.local.CartDao
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
+import com.nativenomad.bitebeyond.models.CartItemEntity
 import com.nativenomad.bitebeyond.models.FoodItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class CartRepositoryImpl(
-    private val application: Application
+    private val application: Application,
+    private val cartDao:CartDao
 ) :CartRepository {
 
     private val _cartItems = MutableStateFlow<MutableMap<FoodItem, Int>>(mutableMapOf())
@@ -23,13 +29,48 @@ class CartRepositoryImpl(
     private val _discountAmount = MutableStateFlow(0)
     override val discountAmount = _discountAmount
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    init {
+        Log.d("CartRepo", "CartRepositoryImpl initialized")
+        coroutineScope.launch {
+            val savedItems = cartDao.getAllCartItems()      //getAllCartItems is suspend function and hence the coroutine scope
+            val restoredMap = savedItems
+                .map { cartEntity ->
+                    FoodItem(
+                        name = cartEntity.name,
+                        cost = cartEntity.cost,
+                        imageUrl = cartEntity.imageUrl,
+                        restaurantName = cartEntity.restaurantName
+                    ) to cartEntity.quantity
+                }
+                .toMap()
+                .toMutableMap()
+            _cartItems.value = restoredMap
+            calculateTotalWithoutDiscount()
+            calculateFinalTotal()
+        }
+    }
 
 
     override suspend fun addToCart(food: FoodItem) {
         val currentCartItems = _cartItems.value.toMutableMap()
-        currentCartItems[food] = (currentCartItems[food] ?: 0) + 1
+        val newQty = (currentCartItems[food] ?: 0) + 1
+        currentCartItems[food] = newQty
         _cartItems.value = currentCartItems
 
+
+        coroutineScope.launch {
+            cartDao.insertItem(
+                CartItemEntity(
+                    name = food.name,
+                    cost = food.cost,
+                    imageUrl = food.imageUrl,
+                    restaurantName = food.restaurantName,
+                    quantity = newQty
+                )
+            )
+        }
 
         calculateTotalWithoutDiscount()
         calculateFinalTotal()
@@ -40,12 +81,37 @@ class CartRepositoryImpl(
     override suspend fun removeFromCart(food: FoodItem) {
         val currentCartItems = _cartItems.value.toMutableMap()  //doing this is necessary to ensure map reference changes otherwise recomposition won't happen
         val currentQty = currentCartItems[food] ?: return
-        if (currentQty > 1) {
-            currentCartItems[food] = currentQty - 1
+        val newQty = currentQty - 1
+        if (newQty > 0) {
+            currentCartItems[food] = newQty
         } else {
             currentCartItems.remove(food)
         }
         _cartItems.value = currentCartItems
+
+        coroutineScope.launch {
+            if (newQty > 0) {
+                cartDao.insertItem(
+                    CartItemEntity(
+                        name = food.name,
+                        cost = food.cost,
+                        imageUrl = food.imageUrl,
+                        restaurantName = food.restaurantName,
+                        quantity = newQty
+                    )
+                )
+            } else {
+                cartDao.deleteItem(
+                    CartItemEntity(
+                        name = food.name,
+                        cost = food.cost,
+                        imageUrl = food.imageUrl,
+                        restaurantName = food.restaurantName,
+                        quantity = currentQty
+                    )
+                )
+            }
+        }
 
         calculateTotalWithoutDiscount()
         calculateFinalTotal()

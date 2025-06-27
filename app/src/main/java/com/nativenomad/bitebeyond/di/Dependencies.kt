@@ -1,6 +1,9 @@
 package com.nativenomad.bitebeyond.di
 
 import android.app.Application
+import androidx.room.Room
+import com.nativenomad.bitebeyond.data.local.CartDao
+import com.nativenomad.bitebeyond.data.local.CartDatabase
 import com.nativenomad.bitebeyond.data.manager.AuthManagerImpl
 import com.nativenomad.bitebeyond.data.manager.LocalUserManagerImpl
 import com.nativenomad.bitebeyond.data.manager.PermissionManagerImpl
@@ -125,13 +128,30 @@ object Dependencies {
 
     @Provides
     @Singleton
-    fun provideCartRepository(application: Application):CartRepository{
+    fun provideCartRepository(application: Application,cartDao: CartDao):CartRepository{
         return CartRepositoryImpl(
-            application = application
+            application = application,
+            cartDao = cartDao
 
         )
     }
     /*I didn't use that useCases way for cart because it had stateflows like final amount,cartItems etc to manage which were only in CartrepositoryImpl
     so we can't just inject a cartRepositoryUse cases into cartViewModel
     */
+
+    @Provides
+    @Singleton
+    fun provideCartDatabase(application: Application):CartDatabase{
+        return Room.databaseBuilder(
+            context = application,
+            klass=CartDatabase::class.java,
+            name="Cart_Database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartDao(cartDatabase: CartDatabase):CartDao{
+        return cartDatabase.cartDao()
+    }
 }
