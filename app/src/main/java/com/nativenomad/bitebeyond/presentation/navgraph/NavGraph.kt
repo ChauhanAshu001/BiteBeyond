@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.nativenomad.bitebeyond.presentation.bottomNav.MainScreen
+import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreen
 import com.nativenomad.bitebeyond.presentation.login.SignInScreen
 import com.nativenomad.bitebeyond.presentation.login.SignUpNavigationEvent
 import com.nativenomad.bitebeyond.presentation.login.SignUpScreen
@@ -23,6 +24,7 @@ import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingNavigationEv
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingViewModel
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailsScreen
+import com.nativenomad.bitebeyond.presentation.search.SearchScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -111,7 +113,7 @@ fun NavGraph(
 
         }
 
-        //bottom bar nav sub-graph
+        //sub-graph starting from main screen
         navigation(route=Routes.MainScreenNavigation.route,startDestination=Routes.MainScreen.route){
             composable(route=Routes.MainScreen.route) {
                 MainScreen(navController)
@@ -127,7 +129,6 @@ fun NavGraph(
             ) {
                 val restaurantName = it.arguments?.getString("restaurantName") ?: ""
                 val distance = it.arguments?.getString("distanceKm") ?: "0.0"
-//                val imageUrl = it.arguments?.getString("imageUrl") ?: ""
                 val imageUrl = Uri.decode(it.arguments?.getString("imageUrl") ?: "")
                 val rating=it.arguments?.getFloat("rating")?:0f
 
@@ -136,6 +137,18 @@ fun NavGraph(
                     rating =rating)
             }
 
+            composable(route=Routes.SearchScreen.route) {
+                SearchScreen(navController=navController)
+            }
+            composable(
+                route="${Routes.CategoryFoodScreen.route}/{categoryName}",
+                arguments=listOf(
+                    navArgument("categoryName"){type=NavType.StringType}
+                )
+            ) {
+                val categoryName = Uri.decode(it.arguments?.getString("categoryName") ?: "")
+                CategoryFoodScreen(category=categoryName, navController = navController)
+            }
         }
     }
 }

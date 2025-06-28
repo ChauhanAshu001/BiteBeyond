@@ -10,13 +10,10 @@ import com.nativenomad.bitebeyond.domain.usecases.permissions.PermissionUseCases
 import com.nativenomad.bitebeyond.models.Category
 import com.nativenomad.bitebeyond.models.Restaurants
 import com.nativenomad.bitebeyond.presentation.login.SignUpEvent
-import com.nativenomad.bitebeyond.presentation.login.SignUpNavigationEvent
 import com.nativenomad.bitebeyond.utils.CalculateDistanceClass
 import com.nativenomad.bitebeyond.utils.GetUserLocationNameClass
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,8 +35,6 @@ class HomeViewModel @Inject constructor(
     private val _restaurants = mutableStateListOf<Restaurants>()
     val restaurants: SnapshotStateList<Restaurants> = _restaurants
 
-    private val _navigateEvent = MutableSharedFlow<HomeScreenNavigationEvent>()
-    val navigateEvent = _navigateEvent.asSharedFlow()
 
     private val _uiState= MutableStateFlow<SignUpEvent>(SignUpEvent.Nothing)
     val uiState=_uiState.asStateFlow()
@@ -107,9 +102,5 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun navigateToRestaurantDetail(restaurantName: String, distanceKm: String, imageUrl: String,rating:Double) {
-        viewModelScope.launch {
-            _navigateEvent.emit(HomeScreenNavigationEvent.navigateToRestaurantDetailsScreen(restaurantName,distanceKm, imageUrl,rating))
-        }
-    }
+
 }

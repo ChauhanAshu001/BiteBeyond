@@ -1,12 +1,8 @@
-package com.nativenomad.bitebeyond.presentation.restaurantDetails.components
+package com.nativenomad.bitebeyond.presentation.categoryFood.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.nativenomad.bitebeyond.models.FoodItem
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,19 +14,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -38,16 +32,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.cart.CartViewModel
+import com.nativenomad.bitebeyond.models.FoodItem
+import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreenEvents
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailEvents
 
 @Composable
-fun FoodItemCard(food:FoodItem,
-                 onEvent:(RestaurantDetailEvents,FoodItem)->Unit) {
-
+fun CategoryFoodCard(food:FoodItem,
+                     onEvent:(CategoryFoodScreenEvents,FoodItem)->Unit) {
     val count= remember { mutableStateOf(0) }
     Card(
         modifier = Modifier
@@ -107,8 +100,8 @@ fun FoodItemCard(food:FoodItem,
                         .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
                         .padding(horizontal = 4.dp, vertical = 2.dp)
                 ) {
-                    IconButton(onClick = {onEvent(RestaurantDetailEvents.MinusClicked,food)
-                                        count.value--
+                    IconButton(onClick = {onEvent(CategoryFoodScreenEvents.onMinusClicked,food)
+                        count.value--
                     }) {
                         Icon(Icons.Default.Remove, contentDescription = "Minus")
                     }
@@ -118,8 +111,8 @@ fun FoodItemCard(food:FoodItem,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Medium
                     )
-                    IconButton(onClick = { onEvent(RestaurantDetailEvents.PlusClicked,food)
-                                   count.value++
+                    IconButton(onClick = { onEvent(CategoryFoodScreenEvents.onPlusClicked,food)
+                        count.value++
                     }) {
                         Icon(Icons.Default.Add, contentDescription = "Plus")
                     }

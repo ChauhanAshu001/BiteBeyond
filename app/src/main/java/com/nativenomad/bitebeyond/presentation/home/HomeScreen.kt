@@ -41,7 +41,6 @@ import com.nativenomad.bitebeyond.presentation.home.components.ShimmerRestaurant
 import com.nativenomad.bitebeyond.presentation.login.SignUpEvent
 import com.nativenomad.bitebeyond.presentation.navgraph.Routes
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeScreen(
@@ -73,14 +72,14 @@ fun HomeScreen(
 
         homeViewModel.fetchUserLocationAndName()
 
-        homeViewModel.navigateEvent.collectLatest { event ->
-            when (event) {
-                is HomeScreenNavigationEvent.navigateToRestaurantDetailsScreen -> {
-                    val encodedUrl = Uri.encode(event.imageUrl)
-                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${event.restaurantName}/${event.distanceKm}/${encodedUrl}/${event.rating}")
-                }
-            }
-        }
+//        homeViewModel.navigateEvent.collectLatest { event ->
+//            when (event) {
+//                is HomeScreenNavigationEvent.navigateToRestaurantDetailsScreen -> {
+//                    val encodedUrl = Uri.encode(event.imageUrl)
+//                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${event.restaurantName}/${event.distanceKm}/${encodedUrl}/${event.rating}")
+//                }
+//            }
+//        }
     }
 
     val categories = homeViewModel.categories
@@ -92,7 +91,7 @@ fun HomeScreen(
 
     //navigation logic to details screen of restaurant
 
-        LazyColumn(
+    LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 64.dp)
 
@@ -147,7 +146,7 @@ fun HomeScreen(
                             }
 
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                IconButton(onClick = { /* Search */ }) {
+                                IconButton(onClick = {navController.navigate(Routes.SearchScreen.route) }) {
                                     Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
                                 }
                                 IconButton(onClick = { /* Notifications */ }) {
@@ -215,7 +214,10 @@ fun HomeScreen(
                             CategoryCard(
                                 category = category,
                                 selected = selectedCategory == category.name,
-                                onClick = { selectedCategory = category.name }
+                                onClick = { selectedCategory = category.name
+                                            val encodedCategory = Uri.encode(category.name)
+                                            navController.navigate("${Routes.CategoryFoodScreen.route}/${encodedCategory}")
+                                }
                             )
                         }
                     }
@@ -266,7 +268,9 @@ fun HomeScreen(
                     ) {
                         row.forEach { restaurant ->
                             Box(modifier = Modifier.weight(1f)) {
-                                RestaurantCard(restaurant = restaurant, onClick = { homeViewModel.navigateToRestaurantDetail(restaurantName = restaurant.name, distanceKm = restaurant.distance, imageUrl = restaurant.imageUrl,rating=restaurant.rating) })
+                                RestaurantCard(restaurant = restaurant, onClick = {
+                                    val encodedUrl = Uri.encode(restaurant.imageUrl)
+                                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${restaurant.name}/${restaurant.distance}/${encodedUrl}/${restaurant.rating}")})
                             }
                         }
                         if (row.size == 1) {
