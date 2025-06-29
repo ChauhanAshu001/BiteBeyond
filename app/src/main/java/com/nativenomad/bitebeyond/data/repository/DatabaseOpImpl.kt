@@ -13,6 +13,7 @@ import com.nativenomad.bitebeyond.models.Category
 import com.nativenomad.bitebeyond.models.FoodItem
 import com.nativenomad.bitebeyond.models.Offers
 import com.nativenomad.bitebeyond.models.Restaurants
+import com.nativenomad.bitebeyond.models.UserProfile
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -152,5 +153,31 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
             restaurantsRef.addValueEventListener(listener)
             awaitClose { restaurantsRef.removeEventListener(listener) }
         }
+    }
+
+    override suspend fun saveUserData(userId: String, user: UserProfile) {
+        val ref = database.getReference("Users").child(userId)
+        ref.setValue(user)
+    }
+
+    override suspend fun getUserData(userId: String): Flow<UserProfile?> {
+        return callbackFlow {
+            val ref = database.getReference("Users").child(userId)
+
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val profile = snapshot.getValue(UserProfile::class.java)
+                    trySend(profile).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            ref.addValueEventListener(listener)
+            awaitClose { ref.removeEventListener(listener) }
+        }
+
     }
 }

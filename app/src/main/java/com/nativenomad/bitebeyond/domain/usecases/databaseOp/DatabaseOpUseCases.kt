@@ -5,5 +5,7 @@ data class DatabaseOpUseCases(
     val getRestaurants: GetRestaurants,
     val getMenu: GetMenu,
     val getOffers: GetOffers,
-    val getPromoCodeRestaurantMap: GetPromoCodeRestaurantMap
+    val getPromoCodeRestaurantMap: GetPromoCodeRestaurantMap,
+    val saveUserData: SaveUserData,
+    val getUserData: GetUserData
 )

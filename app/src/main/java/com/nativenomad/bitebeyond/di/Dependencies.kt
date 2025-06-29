@@ -23,6 +23,8 @@ import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetMenu
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetOffers
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetPromoCodeRestaurantMap
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetRestaurants
+import com.nativenomad.bitebeyond.domain.usecases.databaseOp.GetUserData
+import com.nativenomad.bitebeyond.domain.usecases.databaseOp.SaveUserData
 import com.nativenomad.bitebeyond.domain.usecases.login.CreateAccountWithEmail
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginWithEmail
@@ -30,12 +32,15 @@ import com.nativenomad.bitebeyond.domain.usecases.login.SignInWithFacebook
 import com.nativenomad.bitebeyond.domain.usecases.login.SignInWithGoogle
 import com.nativenomad.bitebeyond.domain.usecases.permissions.GetUserLocation
 import com.nativenomad.bitebeyond.domain.usecases.permissions.PermissionUseCases
+import com.nativenomad.bitebeyond.remote.FreeImageApi
 import com.nativenomad.bitebeyond.utils.CalculateDistanceClass
 import com.nativenomad.bitebeyond.utils.GetUserLocationNameClass
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -95,7 +100,9 @@ object Dependencies {
             getRestaurants = GetRestaurants(databaseOp),
             getMenu= GetMenu(databaseOp),
             getOffers = GetOffers(databaseOp),
-            getPromoCodeRestaurantMap = GetPromoCodeRestaurantMap(databaseOp)
+            getPromoCodeRestaurantMap = GetPromoCodeRestaurantMap(databaseOp),
+            saveUserData = SaveUserData(databaseOp),
+            getUserData = GetUserData(databaseOp)
         )
     }
 
@@ -154,4 +161,15 @@ object Dependencies {
     fun provideCartDao(cartDatabase: CartDatabase):CartDao{
         return cartDatabase.cartDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideFreeImageApi():FreeImageApi{
+        return Retrofit.Builder()
+            .baseUrl("https://freeimage.host/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FreeImageApi::class.java)
+    }
+
 }

@@ -1,6 +1,10 @@
 package com.nativenomad.bitebeyond.presentation.profile
 
-import android.net.Uri
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +28,8 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,25 +37,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.presentation.profile.components.ProfilePhoto
 import com.nativenomad.bitebeyond.presentation.profile.components.ProfileTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(profileViewModel: ProfileViewModel= hiltViewModel()) {
     val lightOrange = colorResource(id = R.color.lightOrange)
 
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    var fullName by remember { mutableStateOf("") }
-    var dob by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("Male") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var locationEnabled by remember { mutableStateOf(false) }
+    val fullName = profileViewModel.name.collectAsState()
+    val gender = profileViewModel.gender.collectAsState()
+    val phone = profileViewModel.phoneNumber.collectAsState()
+    val email = profileViewModel.email.collectAsState()
 
     val genderOptions = listOf("Male", "Female", "Other")
     var genderExpanded by remember { mutableStateOf(false) }
@@ -58,7 +64,8 @@ fun ProfileScreen() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = 24.dp)
+            .padding(bottom = 100.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -76,8 +83,7 @@ fun ProfileScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ProfileTextField("Full Name", fullName) { fullName = it }
-        ProfileTextField("Date of birth", dob) { dob = it }
+        ProfileTextField("Full Name", fullName.value) { profileViewModel.setName(it) }
 
         Text("Gender", modifier = Modifier.fillMaxWidth(), fontWeight = FontWeight.Medium)
         ExposedDropdownMenuBox(
@@ -86,7 +92,7 @@ fun ProfileScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
             TextField(
-                value = gender,
+                value = gender.value,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -102,7 +108,7 @@ fun ProfileScreen() {
                     DropdownMenuItem(
                         text = { Text(option) },
                         onClick = {
-                            gender = option
+                            profileViewModel.setGender(option)
                             genderExpanded = false
                         }
                     )
@@ -111,14 +117,14 @@ fun ProfileScreen() {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        ProfileTextField("Phone", phone) { phone = it }
-        ProfileTextField("Email", email) { email = it }
+        ProfileTextField("Phone", phone.value) { profileViewModel.setPhoneNumber(it) }
+        ProfileTextField("Email", email.value) { profileViewModel.setEmail(it) }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         // Save Button
         Button(
-            onClick = { /* Save action */ },
+            onClick = { profileViewModel.uploadUserData() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -128,23 +134,6 @@ fun ProfileScreen() {
             Text("Save", color = Color.White, fontWeight = FontWeight.Bold)
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Location Toggle
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("Enable Location", fontWeight = FontWeight.Medium)
-            Switch(
-                checked = locationEnabled,
-                onCheckedChange = { locationEnabled = it },
-                colors = SwitchDefaults.colors(checkedThumbColor = lightOrange)
-            )
-        }
 
         Spacer(modifier = Modifier.height(60.dp))
     }

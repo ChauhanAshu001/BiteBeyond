@@ -92,9 +92,9 @@ class HomeViewModel @Inject constructor(
 
     fun fetchUserLocationAndName() {
         viewModelScope.launch {
-            val location = permissionUseCases.getUserLocation()
+            val location = permissionUseCases.getUserLocation() //this will give me lat and lng of user
             if (location != null) {
-                val name = userLocationNameClass.getUserLocationName(context=application, location)
+                val name = userLocationNameClass.getUserLocationName(context=application, location) //this will give the user's location name according to lat and lng
                 _locationName.value = name
             } else {
                 _locationName.value = "Location not found"

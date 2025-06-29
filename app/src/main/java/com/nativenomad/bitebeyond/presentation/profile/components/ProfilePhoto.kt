@@ -1,5 +1,6 @@
 package com.nativenomad.bitebeyond.presentation.profile.components
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,28 +18,35 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.nativenomad.bitebeyond.presentation.profile.ProfileViewModel
 
 @Composable
-fun ProfilePhoto() {
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) } //create a function in viewmodel that makes api call to save this image to freeimage.host
-                                                                                // and then call that function here by making a viewmodel object
+fun ProfilePhoto(photoViewModel: ProfileViewModel= hiltViewModel()) {
+    val selectedImageUri =photoViewModel.imageUrl.collectAsState()
 
+//    LaunchedEffect (selectedImageUri){
+//
+//    }
     // Image picker launcher
+    val context= LocalContext.current
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.OpenDocument() /* If persistent uri wasn't needed then this line would be
+        contract = ActivityResultContracts.GetContent()*/
     ) { uri: Uri? ->
-        selectedImageUri = uri
+        if (uri != null) {
+            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)        /*In viewmodel I will process this uri on Dispatchers.IO thread pool (in saveUserData function) instead of Dispatchers.Main thread pool hence uri need to persist thread change so this is why this line is added*/
+            photoViewModel.setImageUri(uri)
+        }
     }
 
     Column(
@@ -48,9 +56,9 @@ fun ProfilePhoto() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Show selected image or placeholder
-        if (selectedImageUri != null) {
+        if (selectedImageUri.value.toString().isNotEmpty()) {
             AsyncImage(
-                model = selectedImageUri,
+                model = selectedImageUri.value.toString(),
                 contentDescription = "Profile Photo",
                 modifier = Modifier
                     .size(120.dp)
@@ -73,7 +81,7 @@ fun ProfilePhoto() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(onClick = {
-            launcher.launch("image/*") // Launch image picker
+            launcher.launch(arrayOf("image/*")) // Launch image picker
         }) {
             Text(text = "Choose Profile Photo")
         }

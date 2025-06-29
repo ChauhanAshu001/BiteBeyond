@@ -71,15 +71,6 @@ fun HomeScreen(
         }
 
         homeViewModel.fetchUserLocationAndName()
-
-//        homeViewModel.navigateEvent.collectLatest { event ->
-//            when (event) {
-//                is HomeScreenNavigationEvent.navigateToRestaurantDetailsScreen -> {
-//                    val encodedUrl = Uri.encode(event.imageUrl)
-//                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${event.restaurantName}/${event.distanceKm}/${encodedUrl}/${event.rating}")
-//                }
-//            }
-//        }
     }
 
     val categories = homeViewModel.categories

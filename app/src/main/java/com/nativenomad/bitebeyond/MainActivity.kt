@@ -1,5 +1,6 @@
 package com.nativenomad.bitebeyond
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.facebook.FacebookSdk
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -56,6 +58,8 @@ class MainActivity : ComponentActivity() {
                     val startDestination=viewModel.startDestination
                     NavGraph(startDestination = startDestination )
                 }
+
+
             }
         }
     }
