@@ -16,8 +16,8 @@ interface CartDao {
     @Query("SELECT * FROM cart_items")
     suspend fun getAllCartItems(): List<CartItemEntity>
 
-//    @Query("DELETE FROM cart_items")
-//    suspend fun clearCart()
+    @Query("DELETE FROM cart_items")
+    suspend fun clearCart()
 //
 //    @Update
 //    suspend fun updateItem(item: CartItemEntity)

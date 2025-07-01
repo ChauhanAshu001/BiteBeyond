@@ -9,11 +9,13 @@ import com.nativenomad.bitebeyond.data.manager.LocalUserManagerImpl
 import com.nativenomad.bitebeyond.data.manager.PermissionManagerImpl
 import com.nativenomad.bitebeyond.data.repository.CartRepositoryImpl
 import com.nativenomad.bitebeyond.data.repository.DatabaseOpImpl
+import com.nativenomad.bitebeyond.data.repository.ProfileDataRepositoryImpl
 import com.nativenomad.bitebeyond.domain.manager.AuthManager
 import com.nativenomad.bitebeyond.domain.manager.LocalUserManager
 import com.nativenomad.bitebeyond.domain.manager.PermissionManager
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
 import com.nativenomad.bitebeyond.domain.repository.DatabaseOp
+import com.nativenomad.bitebeyond.domain.repository.ProfileDataRepository
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.AppEntryUseCases
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.ReadAppEntry
 import com.nativenomad.bitebeyond.domain.usecases.app_entry.SaveAppEntry
@@ -170,6 +172,12 @@ object Dependencies {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(FreeImageApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileDataRepository(databaseOpUseCases: DatabaseOpUseCases):ProfileDataRepository{
+        return ProfileDataRepositoryImpl(databaseOpUseCases)
     }
 
 }

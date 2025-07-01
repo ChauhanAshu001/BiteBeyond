@@ -1,0 +1,12 @@
+package com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn
+
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpEvent
+
+sealed class SignInEvent {
+    object Nothing: SignInEvent()        /*this is used to store some initial value in _uiState Variable we'll create in viewmodel because initially
+    we can't store Success or Error or Loading in _uiState Variable
+    */
+    object Success: SignInEvent()
+    object Error: SignInEvent()
+    object Loading: SignInEvent()
+}

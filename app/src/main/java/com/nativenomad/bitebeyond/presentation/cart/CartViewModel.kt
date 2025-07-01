@@ -1,13 +1,17 @@
 package com.nativenomad.bitebeyond.presentation.cart
 
 
+import android.app.Activity
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.models.FoodItem
+import com.razorpay.Checkout
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -46,6 +50,7 @@ class CartViewModel @Inject constructor(
     val _addressChanged=MutableStateFlow(false)
     val addressChanged=_addressChanged.asStateFlow()
 
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()  //used to check if user is logged in or not before ordering because order details needs to be saved in firebase database according to uid of user who placed order
 
     init{
         fetchPromoCodeMap()
@@ -101,6 +106,18 @@ class CartViewModel @Inject constructor(
         }
         _promoApplied.value=true
 
+    }
+    fun clearCart() {
+        viewModelScope.launch {
+            cartRepository.clearCart()
+        }
+    }
+
+    fun checkLoginOrNot():Boolean{
+        if(uid!="null"){
+            return true
+        }
+        else return false
     }
 
 }

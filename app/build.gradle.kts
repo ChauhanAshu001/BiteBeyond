@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -137,6 +140,9 @@ dependencies {
 
     //for realtime database
     implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+
+    //for firebase firestore
+    implementation("com.google.firebase:firebase-firestore")
     //facebook login
 
     implementation("com.facebook.android:facebook-login:18.0.3")
@@ -149,6 +155,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
 
+    //razorpay
+    implementation ("com.razorpay:checkout:1.6.41")
 
 
 }

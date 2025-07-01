@@ -1,18 +1,11 @@
-package com.nativenomad.bitebeyond.presentation.login
+package com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp
 
-import android.app.Activity
-import android.app.Application
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.facebook.CallbackManager
-import com.nativenomad.bitebeyond.domain.manager.AuthManager
 import com.nativenomad.bitebeyond.domain.usecases.login.LoginUseCases
 import com.nativenomad.bitebeyond.models.AuthResponse
-import com.nativenomad.bitebeyond.presentation.navgraph.NavGraph
-import com.nativenomad.bitebeyond.presentation.navgraph.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +37,6 @@ class SignUpViewmodel@Inject constructor(
     val password=_password.asStateFlow()
     private val _name= MutableStateFlow<String>("")
     val name=_name.asStateFlow()
-
     fun onEmailChange(email:String){
         _email.value=email
     }
@@ -55,25 +47,29 @@ class SignUpViewmodel@Inject constructor(
         _name.value=name
     }
 
+
      fun onCreateAccountWithEmailClick(){
-        _uiState.value=SignUpEvent.Loading
+        _uiState.value= SignUpEvent.Loading
         loginUseCases.createAccountWithEmail(email=email.value,password=password.value).onEach{response->
             if(response is AuthResponse.Success) {
-                _uiState.value=SignUpEvent.Success
+                _uiState.value= SignUpEvent.Success
                 _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+            }
+            else{
+                _uiState.value=SignUpEvent.Error
             }
         }.launchIn(viewModelScope)
     }
 
     fun onSignInWithGoogleClick(){
-        _uiState.value=SignUpEvent.Loading
+        _uiState.value= SignUpEvent.Loading
         loginUseCases.signInWithGoogle().onEach{response->
             if(response is AuthResponse.Success) {
-                _uiState.value=SignUpEvent.Success
+                _uiState.value= SignUpEvent.Success
                 _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
             }
             else{
-                _uiState.value=SignUpEvent.Error
+                _uiState.value= SignUpEvent.Error
             }
         }.launchIn(viewModelScope)
     }
@@ -81,30 +77,36 @@ class SignUpViewmodel@Inject constructor(
     fun onSignInWithFacebookClick(activity: ComponentActivity,
                                   callbackManager: CallbackManager
     ){
-        _uiState.value=SignUpEvent.Loading
+        _uiState.value= SignUpEvent.Loading
         loginUseCases.signInWithFacebook(activity,callbackManager).onEach{response->
             if(response is AuthResponse.Success) {
-                _uiState.value=SignUpEvent.Success
+                _uiState.value= SignUpEvent.Success
                 _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
             }
             else{
-                _uiState.value=SignUpEvent.Error
+                _uiState.value= SignUpEvent.Error
             }
         }.launchIn(viewModelScope)
     }
-    fun onEvent(event:SignUpNavigationEvent){
-        when(event){
-            is SignUpNavigationEvent.NavigateToLogin->{
-                viewModelScope.launch{
-                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToLogin)
+    fun onEvent(event: SignUpNavigationEvent){
+        when(event) {
+            is SignUpNavigationEvent.NavigateToSignIn -> {
+                viewModelScope.launch {
+                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToSignIn)
                 }
             }
-            is SignUpNavigationEvent.NavigateToHome->{
+
+            is SignUpNavigationEvent.NavigateToHome -> {
                 viewModelScope.launch {
                     _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
                 }
             }
+
+            is SignUpNavigationEvent.NavigateToHomeFromSkip -> {
+                viewModelScope.launch {
+                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToHomeFromSkip)
+                }
+            }
         }
     }
-
 }

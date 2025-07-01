@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.common
+package com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.login.SignUpViewmodel
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpViewmodel
 
 @Composable
 fun GoogleButton(modifier: Modifier,

@@ -14,5 +14,6 @@ interface CartRepository {
     suspend fun calculateTotalWithoutDiscount(): Int
     suspend fun calculateFinalTotal(): Int
     suspend fun applyPromoCode(code:String,promoCodeRestaurantMap:Map<String,String>)
+    suspend fun clearCart()
 
 }

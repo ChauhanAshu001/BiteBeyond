@@ -16,15 +16,17 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.nativenomad.bitebeyond.presentation.bottomNav.MainScreen
 import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreen
-import com.nativenomad.bitebeyond.presentation.login.SignInScreen
-import com.nativenomad.bitebeyond.presentation.login.SignUpNavigationEvent
-import com.nativenomad.bitebeyond.presentation.login.SignUpScreen
-import com.nativenomad.bitebeyond.presentation.login.SignUpViewmodel
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInScreen
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpNavigationEvent
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpScreen
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpViewmodel
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingNavigationEvent
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingViewModel
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailsScreen
 import com.nativenomad.bitebeyond.presentation.search.SearchScreen
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInNavigationEvent
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -87,7 +89,7 @@ fun NavGraph(
                 LaunchedEffect(true) {
                     viewModel.navigateEvent.collectLatest { signUpNavigationEvent ->
                         when (signUpNavigationEvent) {
-                            is SignUpNavigationEvent.NavigateToLogin -> {
+                            is SignUpNavigationEvent.NavigateToSignIn -> {
                                 navController.navigate(Routes.SignInScreen.route)
                             }
 
@@ -98,16 +100,42 @@ fun NavGraph(
                                     }
                                 }
                             }
+                            is SignUpNavigationEvent.NavigateToHomeFromSkip -> {
+                                navController.navigate(Routes.MainScreenNavigation.route)
+                            }
                         }
 
                     }
                 }
-                SignUpScreen(event = { signUpNavigationEvent ->
+                SignUpScreen(onEvent = { signUpNavigationEvent ->
                     viewModel.onEvent(signUpNavigationEvent)
                 })
             }
             composable(route = Routes.SignInScreen.route) {
-                SignInScreen()
+                val viewmodel:SignInViewModel= hiltViewModel()
+                LaunchedEffect(true){
+                    viewmodel.navigateEvent.collectLatest { signInNavigationEvent ->
+                        when(signInNavigationEvent){
+                            is SignInNavigationEvent.NavigateToSignUp->{
+                                navController.navigate(Routes.SignUpScreen.route)
+                            }
+                            is SignInNavigationEvent.NavigateToHome->{
+                                navController.navigate(Routes.MainScreenNavigation.route){
+                                    popUpTo(Routes.SignInScreen.route){
+                                        inclusive=true
+                                    }
+                                }
+                            }
+                            is SignInNavigationEvent.NavigateToHomeFromSkip->{
+                                navController.navigate(Routes.MainScreenNavigation.route)  //popping is not done in this case so that user can login anytime by going back
+                            }
+                        }
+                    }
+                }
+
+                SignInScreen(onEvent = {signInNavigationEvent->
+                    viewmodel.onEvent(signInNavigationEvent)
+                })
 
             }
 

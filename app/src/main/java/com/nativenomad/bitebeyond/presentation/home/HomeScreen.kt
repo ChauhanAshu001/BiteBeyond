@@ -38,7 +38,7 @@ import com.nativenomad.bitebeyond.presentation.home.components.CategoryCard
 import com.nativenomad.bitebeyond.presentation.home.components.RestaurantCard
 import com.nativenomad.bitebeyond.presentation.home.components.ShimmerCategoryCard
 import com.nativenomad.bitebeyond.presentation.home.components.ShimmerRestaurantCard
-import com.nativenomad.bitebeyond.presentation.login.SignUpEvent
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpEvent
 import com.nativenomad.bitebeyond.presentation.navgraph.Routes
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
 

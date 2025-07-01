@@ -1,6 +1,11 @@
 package com.nativenomad.bitebeyond.presentation.cart
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -35,13 +41,18 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.nativenomad.bitebeyond.PaymentActivity
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.presentation.cart.components.CartFoodItemCard
+import com.nativenomad.bitebeyond.presentation.navgraph.Routes
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Composable
-fun CartScreen(cartViewModel: CartViewModel = hiltViewModel()) {
+fun CartScreen(cartViewModel: CartViewModel = hiltViewModel(),
+               navController: NavController
+               ) {
     val cartItems = cartViewModel.cartItems.collectAsState()
     val address = cartViewModel.address.collectAsState()
     val promoCode = cartViewModel.promoCode.collectAsState()
@@ -55,6 +66,18 @@ fun CartScreen(cartViewModel: CartViewModel = hiltViewModel()) {
 
     LaunchedEffect(isPromoApplied.value) {
         errorMessage.value = if (!isPromoApplied.value) "Enter a valid Promo Code" else ""
+    }
+
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Toast.makeText(context, "Payment successful", Toast.LENGTH_SHORT).show()
+            cartViewModel.clearCart()
+        } else {
+            Toast.makeText(context, "Payment failed or cancelled", Toast.LENGTH_SHORT).show()
+        }
     }
 
     if (cartItems.value.isEmpty()) {
@@ -161,7 +184,19 @@ fun CartScreen(cartViewModel: CartViewModel = hiltViewModel()) {
 
                 Spacer(Modifier.height(16.dp))
                 Button(
-                    onClick = { /* Place Order */ },
+                    onClick = {
+                        if(cartViewModel.checkLoginOrNot()){
+                            val intent = Intent(context, PaymentActivity::class.java)
+                            intent.putExtra("amount", finalTotal.value)
+                            launcher.launch(intent)
+                        }
+                        else{
+                            Toast.makeText(context,"Login Before Ordering",Toast.LENGTH_SHORT).show()
+                            navController.navigate(Routes.SignUpNavigation.route)
+                        }
+
+
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.lightOrange))
                 ) {

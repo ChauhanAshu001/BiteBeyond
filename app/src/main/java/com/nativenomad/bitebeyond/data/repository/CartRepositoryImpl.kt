@@ -173,5 +173,19 @@ class CartRepositoryImpl(
         calculateFinalTotal()
     }
 
+    override suspend fun clearCart() {
+
+        //this function is used after order completes to clear cart, so to clear cart it clears both things i.e entries from room database and also from cartRepository _cartItems map
+
+        coroutineScope.launch {
+            cartDao.clearCart() // Clear Room database
+        }
+
+        _cartItems.value= mutableMapOf()
+        _total.value = 0
+        _discountAmount.value = 0
+        _finalTotal.value = 0
+    }
+
 
 }

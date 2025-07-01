@@ -13,7 +13,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -21,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.models.NavItems
@@ -76,8 +74,8 @@ fun ContentScreen(modifier: Modifier=Modifier, screen: String,navController: Nav
     when(screen){
         "Home"->HomeScreen(navController=navController)
 //        "AI"->AiScreen()
-        "Cart"->CartScreen()
-        "Profile"->ProfileScreen()
+        "Cart"->CartScreen(navController = navController)
+        "Profile"->ProfileScreen(navController = navController)
 
     }
 }

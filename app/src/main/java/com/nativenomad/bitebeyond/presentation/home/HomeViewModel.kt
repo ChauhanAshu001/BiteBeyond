@@ -9,7 +9,7 @@ import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.domain.usecases.permissions.PermissionUseCases
 import com.nativenomad.bitebeyond.models.Category
 import com.nativenomad.bitebeyond.models.Restaurants
-import com.nativenomad.bitebeyond.presentation.login.SignUpEvent
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpEvent
 import com.nativenomad.bitebeyond.utils.CalculateDistanceClass
 import com.nativenomad.bitebeyond.utils.GetUserLocationNameClass
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
 
     private fun observeCategories() {
         viewModelScope.launch {
-            _uiState.value=SignUpEvent.Loading
+            _uiState.value= SignUpEvent.Loading
             databaseOpUseCases.getCategories().collectLatest { list ->
                 _categories.clear()
                 _categories.addAll(list)
@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
 
             val userLocation = permissionUseCases.getUserLocation()
-            _uiState.value=SignUpEvent.Loading
+            _uiState.value= SignUpEvent.Loading
             databaseOpUseCases.getRestaurants().collectLatest { list ->
                 val updated = list.map { restaurant ->
                     val distance = if (userLocation != null)

@@ -1,9 +1,8 @@
-package com.nativenomad.bitebeyond.presentation.login
+package com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp
 
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,20 +12,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,15 +32,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.facebook.CallbackManager
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.common.FacebookButton
-import com.nativenomad.bitebeyond.presentation.common.GoogleButton
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInNavigationEvent
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.components.FacebookButton
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.components.GoogleButton
 import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SignUpScreen(
-    viewModel:SignUpViewmodel= hiltViewModel(),
-    event:(SignUpNavigationEvent)->Unit
+    viewModel: SignUpViewmodel = hiltViewModel(),
+    onEvent:(SignUpNavigationEvent)->Unit
 ) {
     val name =viewModel.name.collectAsStateWithLifecycle()
     val email =viewModel.email.collectAsStateWithLifecycle()
@@ -53,7 +52,7 @@ fun SignUpScreen(
     val loading=remember{ mutableStateOf(false) }
 
     val callbackManager = remember { CallbackManager.Factory.create() }
-
+    var passwordVisible by remember { mutableStateOf(false) } //used to hide and show password
 
 //    val callbackManager = remember { CallbackManager.Factory.create() } //for facebook authentication
 //    val facebookLoginLauncher = rememberLauncherForActivityResult(
@@ -84,16 +83,28 @@ fun SignUpScreen(
                 is SignUpNavigationEvent.NavigateToHome->{
                     Toast.makeText(context,"Signup Successful",Toast.LENGTH_SHORT).show()
                 }
-                else->{
-
+                else -> {
+                    //I don't need a Toast to go to signIn screen It will just go to that screen
                 }
             }
         }
     }
 
+
     Box(modifier = Modifier.fillMaxSize()
         .background(Color.White)
         .padding(top = 70.dp)) {
+
+        Box(  //skip button
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.TopEnd
+        ) {
+            TextButton(onClick = { onEvent(SignUpNavigationEvent.NavigateToHomeFromSkip) }) {
+                Text("Skip", color = Color.Gray)
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -173,7 +184,16 @@ fun SignUpScreen(
                 label = { Text("Password") },
                 leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Password Icon") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    val icon = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = icon, contentDescription = description)
+                    }
+                },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -201,7 +221,7 @@ fun SignUpScreen(
 
                 )
             ) {
-                Box(){
+                Box{
                     AnimatedContent(targetState= loading.value){ target->
                         if(target){
                             CircularProgressIndicator(
@@ -238,7 +258,7 @@ fun SignUpScreen(
                 text = "Already have an account?",
                 fontSize = 16.sp,
                 color = Color.Blue,
-                modifier = Modifier.clickable { event(SignUpNavigationEvent.NavigateToLogin) }
+                modifier = Modifier.clickable { onEvent(SignUpNavigationEvent.NavigateToSignIn) }
             )
         }
     }
@@ -249,6 +269,6 @@ fun SignUpScreen(
 @Composable
 private fun SignUpScreenPreview() {
     BiteBeyondTheme {
-        SignUpScreen(event={})
+        SignUpScreen(onEvent={})
     }
 }

@@ -1,6 +1,5 @@
-package com.nativenomad.bitebeyond.presentation.common
+package com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.components
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,12 +17,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.facebook.CallbackManager
 import com.nativenomad.bitebeyond.MainActivity
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.login.SignUpViewmodel
+import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInViewModel
 
 @Composable
-fun FacebookButton(modifier: Modifier,
-                   viewModel: SignUpViewmodel = hiltViewModel(),
-                   callbackManager: CallbackManager,
+fun SignInFacebookButton(modifier: Modifier,
+                   viewModel: SignInViewModel = hiltViewModel(),
+                   callbackManager: CallbackManager
 ) {
     val context = LocalContext.current
 //    val activity = context as Activity
