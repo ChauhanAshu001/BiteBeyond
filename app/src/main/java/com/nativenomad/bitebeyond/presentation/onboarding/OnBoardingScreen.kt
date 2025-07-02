@@ -81,7 +81,7 @@ fun OnBoardingScreen(
                         scope.launch {
                             if (pagerState.currentPage == 2) {
                                 event(OnBoardingEvent.SaveAppEntry)
-                                event(OnBoardingEvent.NavigateToSignUp)
+                                event(OnBoardingEvent.NavigateToSignUpScreen)
                             } else {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }

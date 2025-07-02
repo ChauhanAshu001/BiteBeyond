@@ -1,35 +1,25 @@
-//import androidx.glance.appwidget.compose
-//import androidx.navigation.compose.navigation
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose) // Assuming you still use Compose
-
+    alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
     id("kotlin-kapt") // Apply the Kapt plugin
     alias(libs.plugins.hilt.android) // Hilt Gradle plugin
-
-    //firebase
-    id("com.google.gms.google-services")  //Google Services Gradle plugin, this plugin reads the google-services.json file.
-
 }
 
 android {
-    namespace = "com.nativenomad.bitebeyond"
-    compileSdk = 35
+
+    namespace = "com.nativenomad.adminbitebeyond"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.nativenomad.bitebeyond"
+        applicationId = "com.nativenomad.adminbitebeyond"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -45,18 +35,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
     kotlinOptions {
         jvmTarget = "11"
     }
     buildFeatures {
         compose = true
-    }
-
-    kapt {
-        correctErrorTypes = true
     }
 }
 
@@ -70,9 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,19 +75,11 @@ dependencies {
     //Compose Navigation
     implementation(libs.androidx.navigation.compose)
 
-    //retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
     //coil
     implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif) // Optional, for GIF support
     implementation(libs.coil.svg) // Optional, for SVG support
-
-    //datastore
-    implementation(libs.androidx.datastore.preferences) // For Preferences DataStore
-    implementation(libs.androidx.datastore.core)    // For Proto DataStore
 
     //composition
     implementation(libs.androidx.foundation)
@@ -115,21 +87,15 @@ dependencies {
     //accompanist system ui controller
     implementation(libs.accompanist.systemuicontroller)
 
-    //paging 3
-    implementation(libs.androidx.paging.runtime) // For Java/Kotlin projects
-    implementation(libs.androidx.paging.compose) // For Jetpack Compose support (optional)
-
     //room - Using Kapt
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)       // Room Kapt compiler
 
     //firebase dependencies
-
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))  //Firebase BOM ensures all Firebase libraries remain at compatible versions. Due to this you don't need to specify version numbers of firebase libraries you import further
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-auth-ktx")
-
 
 
     //for google authentication
@@ -140,7 +106,7 @@ dependencies {
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     //for realtime database
-    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-database-ktx")
 
     //for firebase firestore
     implementation("com.google.firebase:firebase-firestore")
@@ -149,16 +115,4 @@ dependencies {
     implementation("com.facebook.android:facebook-login:18.0.3")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation ("com.facebook.android:facebook-android-sdk:17.0.2")
-
-    //dependency to use location
-    implementation("com.google.android.gms:play-services-location:21.0.0")
-    implementation("androidx.compose.material:material-icons-extended:1.6.1")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
-
-    //razorpay
-    implementation ("com.razorpay:checkout:1.6.41")
-
-
 }
-

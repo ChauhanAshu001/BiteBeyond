@@ -13,16 +13,16 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     private val appEntryUseCases: AppEntryUseCases
 ): ViewModel() {
-    private val _navigationEvent = MutableSharedFlow<OnBoardingNavigationEvent>()
+    private val _navigationEvent = MutableSharedFlow<OnBoardingEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
     fun onEvent(event:OnBoardingEvent){
         when(event){
             is OnBoardingEvent.SaveAppEntry->{
                 saveAppEntry()
             }
-            is OnBoardingEvent.NavigateToSignUp -> {
+            is OnBoardingEvent.NavigateToSignUpScreen -> {
                 viewModelScope.launch {
-                    _navigationEvent.emit(OnBoardingNavigationEvent.NavigateToSignUpScreen)
+                    _navigationEvent.emit(OnBoardingEvent.NavigateToSignUpScreen)
                 }
             }
         }

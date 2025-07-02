@@ -16,11 +16,11 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.nativenomad.bitebeyond.presentation.bottomNav.MainScreen
 import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreen
+import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingEvent
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpNavigationEvent
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpViewmodel
-import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingNavigationEvent
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingViewModel
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailsScreen
@@ -72,9 +72,10 @@ fun NavGraph(
                 LaunchedEffect(true) { // Or key1 = Unit
                     viewModel.navigationEvent.collectLatest { event ->
                         when (event) {
-                            is OnBoardingNavigationEvent.NavigateToSignUpScreen -> {
+                            is OnBoardingEvent.NavigateToSignUpScreen -> {
                                 navController.navigate(Routes.SignUpNavigation.route)
                             }
+                            else->{}
                         }
                     }
                 }
