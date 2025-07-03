@@ -1,7 +1,8 @@
-package com.nativenomad.bitebeyond.data.manager
+package com.nativenomad.adminbitebeyond.data.manager
 
 import android.content.Context
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.res.stringResource
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -18,16 +19,16 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
-import com.nativenomad.bitebeyond.domain.manager.AuthManager
-import com.nativenomad.bitebeyond.models.AuthResponse
-import com.nativenomad.bitebeyond.utils.Constants.google_web_client_id
+import com.nativenomad.adminbitebeyond.domain.manager.AuthManager
+import com.nativenomad.adminbitebeyond.models.AuthResponse
+import com.nativenomad.adminbitebeyond.utils.Constants.google_web_client_id
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.security.MessageDigest
 import java.util.UUID
 
-class AuthManagerImpl(val context : Context):AuthManager {
+class AuthManagerImpl(val context : Context): AuthManager {
     private val auth = Firebase.auth
 
 

@@ -14,8 +14,13 @@ import androidx.navigation.navigation
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingEvent
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingViewModel
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInScreen
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInViewModel
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signup.SignUpNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signup.SignUpScreen
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signup.SignUpViewmodel
 import kotlinx.coroutines.flow.collectLatest
-
 @Composable
 fun NavGraph(
     startDestination:String
@@ -49,27 +54,74 @@ fun NavGraph(
             )+ fadeOut(animationSpec = tween(300))
         }
     ){
-        navigation(route=Routes.AppStartNavigation.route, startDestination = Routes.OnBoardingScreen.route){
-            composable(route=Routes.OnBoardingScreen.route){
-                val viewModel: OnBoardingViewModel = hiltViewModel()
-                LaunchedEffect(true) { // Or key1 = Unit
-                    viewModel.navigationEvent.collectLatest { event ->
-                        when (event) {
-                            is OnBoardingEvent.NavigateToSignUpScreen -> {
-                                navController.navigate(Routes.SignUpScreen.route)
-                            }
-                            else->{}
+        composable(route=Routes.OnBoardingScreen.route){
+            val viewModel: OnBoardingViewModel = hiltViewModel()
+            LaunchedEffect(true) { // Or key1 = Unit
+                viewModel.navigationEvent.collectLatest { event ->
+                    when (event) {
+                        is OnBoardingEvent.NavigateToSignUpScreen -> {
+                            navController.navigate(Routes.SignUpScreen.route)
+                        }
+                        else->{}
+                    }
+                }
+            }
+            OnBoardingScreen(event = {onBoardingEvent->
+                viewModel.onEvent(onBoardingEvent)
+            })
+        }
+
+        composable(route=Routes.SignUpScreen.route){
+            val viewModel:SignUpViewmodel= hiltViewModel()
+            LaunchedEffect(true) {
+                viewModel.navigateEvent.collectLatest { signUpNavigationEvent ->
+                    when (signUpNavigationEvent) {
+                        is SignUpNavigationEvent.NavigateToSignIn -> {
+                            navController.navigate(Routes.SignInScreen.route)
+                        }
+
+                        is SignUpNavigationEvent.NavigateToHome -> {
+                            TODO()
+//                                navController.navigate(Routes.MainScreenNavigation.route) {
+//                                    popUpTo(Routes.SignUpScreen.route) {
+//                                        inclusive = true
+//                                    }
+//                                }
+                        }
+                    }
+
+                }
+            }
+            SignUpScreen (onEvent = {signUpNavigationEvent->
+                viewModel.onEvent(signUpNavigationEvent)
+            })
+        }
+        composable(route=Routes.SignInScreen.route) {
+            val viewmodel: SignInViewModel = hiltViewModel()
+            LaunchedEffect(true){
+                viewmodel.navigateEvent.collectLatest { signInNavigationEvent ->
+                    when(signInNavigationEvent){
+                        is SignInNavigationEvent.NavigateToSignUp->{
+                            navController.navigate(Routes.SignUpScreen.route)
+                        }
+                        is SignInNavigationEvent.NavigateToHome->{
+                            TODO()
+//                                navController.navigate(Routes.MainScreenNavigation.route){
+//                                    popUpTo(Routes.SignInScreen.route){
+//                                        inclusive=true
+//                                    }
+//                                }
                         }
                     }
                 }
-                OnBoardingScreen(event = {onBoardingEvent->
-                    viewModel.onEvent(onBoardingEvent)
-                })
             }
 
-            composable(route=Routes.SignUpScreen.route){
-                TODO()
-            }
+            SignInScreen(onEvent = {signInNavigationEvent->
+                viewmodel.onEvent(signInNavigationEvent)
+            })
+
         }
+
     }
+
 }

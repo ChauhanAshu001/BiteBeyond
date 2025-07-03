@@ -18,7 +18,7 @@ fun MyButton(
     onClick:()->Unit,
 ){
     Button(onClick=onClick,colors= ButtonDefaults.buttonColors(
-        containerColor = colorResource(R.color.darkOrange),
+        containerColor = colorResource(R.color.lightGreen),
         contentColor = Color.White
     ),
         shape= RoundedCornerShape(size= 10.dp)

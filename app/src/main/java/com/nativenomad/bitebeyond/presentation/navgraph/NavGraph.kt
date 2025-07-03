@@ -69,7 +69,7 @@ fun NavGraph(
         ){
             composable(route=Routes.OnBoardingScreen.route){
                 val viewModel: OnBoardingViewModel = hiltViewModel() //creating object of viewmodel whose creation is handled by hilt
-                LaunchedEffect(true) { // Or key1 = Unit
+                LaunchedEffect(Unit) { // Or key1 = Unit
                     viewModel.navigationEvent.collectLatest { event ->
                         when (event) {
                             is OnBoardingEvent.NavigateToSignUpScreen -> {
@@ -87,7 +87,7 @@ fun NavGraph(
         navigation(route=Routes.SignUpNavigation.route, startDestination=Routes.SignUpScreen.route) {
             composable(route = Routes.SignUpScreen.route) {
                 val viewModel: SignUpViewmodel = hiltViewModel()
-                LaunchedEffect(true) {
+                LaunchedEffect(Unit) {
                     viewModel.navigateEvent.collectLatest { signUpNavigationEvent ->
                         when (signUpNavigationEvent) {
                             is SignUpNavigationEvent.NavigateToSignIn -> {
@@ -114,7 +114,7 @@ fun NavGraph(
             }
             composable(route = Routes.SignInScreen.route) {
                 val viewmodel:SignInViewModel= hiltViewModel()
-                LaunchedEffect(true){
+                LaunchedEffect(Unit){
                     viewmodel.navigateEvent.collectLatest { signInNavigationEvent ->
                         when(signInNavigationEvent){
                             is SignInNavigationEvent.NavigateToSignUp->{

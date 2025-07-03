@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import com.nativenomad.adminbitebeyond.R
 import com.nativenomad.adminbitebeyond.presentation.Paddings.IndicatorSize
 
 @Composable
@@ -18,7 +20,7 @@ fun PageIndicator(
     modifier: Modifier = Modifier,
     pageSize:Int,   //how many pages are there
     selectedPage:Int,
-    selectedColor: Color = MaterialTheme.colorScheme.primary, //default select and unselect colors are set but specifying these colors as parameter allow to modify them while calling function.
+    selectedColor: Color = colorResource(id= R.color.indicatorColor), //default select and unselect colors are set but specifying these colors as parameter allow to modify them while calling function.
     unselectedColor: Color = Color.Gray) {
 
     Row(modifier=modifier,horizontalArrangement = Arrangement.SpaceBetween){

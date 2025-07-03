@@ -81,7 +81,7 @@ fun OnBoardingPage(
                         text = page.title,
                         style = MaterialTheme.typography.displaySmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = colorResource(id = R.color.lightOrange),
+                        color = colorResource(id = R.color.lightGreen),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(

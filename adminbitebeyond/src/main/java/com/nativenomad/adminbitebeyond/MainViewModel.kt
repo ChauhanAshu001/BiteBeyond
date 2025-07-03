@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MainViewModel@Inject constructor(
     private val appEntryUseCases: AppEntryUseCases
 ):ViewModel() {
-    var startDestination by mutableStateOf(Routes.AppStartNavigation.route)
+    var startDestination by mutableStateOf(Routes.OnBoardingScreen.route)
         private set
     var splashCondition by mutableStateOf(true)
 
@@ -27,7 +27,7 @@ class MainViewModel@Inject constructor(
                 startDestination=Routes.SignUpScreen.route
             }
             else{
-                startDestination=Routes.AppStartNavigation.route
+                startDestination=Routes.OnBoardingScreen.route
             }
             delay(300)
             splashCondition=false
