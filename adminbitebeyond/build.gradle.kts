@@ -10,7 +10,7 @@ plugins {
 android {
 
     namespace = "com.nativenomad.adminbitebeyond"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nativenomad.adminbitebeyond"
@@ -83,6 +83,10 @@ dependencies {
 
     //composition
     implementation(libs.androidx.foundation)
+
+    //datastore
+    implementation(libs.androidx.datastore.preferences) // For Preferences DataStore
+    implementation(libs.androidx.datastore.core)    // For Proto DataStore
 
     //accompanist system ui controller
     implementation(libs.accompanist.systemuicontroller)

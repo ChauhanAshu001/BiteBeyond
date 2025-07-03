@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.onboarding.components
+package com.nativenomad.adminbitebeyond.presentation.onboarding.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -6,13 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +24,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.presentation.Paddings.MediumPadding2
-import com.nativenomad.bitebeyond.presentation.onboarding.Page
-import com.nativenomad.bitebeyond.presentation.onboarding.pages
-import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
+import com.nativenomad.adminbitebeyond.R
+import com.nativenomad.adminbitebeyond.presentation.Paddings.MediumPadding2
+import com.nativenomad.adminbitebeyond.presentation.onboarding.Page
+import com.nativenomad.adminbitebeyond.presentation.onboarding.pages
+import com.nativenomad.adminbitebeyond.ui.theme.BiteBeyondTheme
+
+
 @Composable
 fun OnBoardingPage(
     page: Page,
@@ -73,9 +71,9 @@ fun OnBoardingPage(
         ) {
             Box(
                 modifier = Modifier
-                    .width(311.dp)
+                    .width(320.dp)
                     .clip(RoundedCornerShape(25.dp))
-                    .background(colorResource(id = R.color.lightOrange))
+                    .background(colorResource(id = R.color.white))
                     .padding(16.dp)
             ) {
                 Column {
@@ -83,13 +81,13 @@ fun OnBoardingPage(
                         text = page.title,
                         style = MaterialTheme.typography.displaySmall,
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.White,
+                        color = colorResource(id = R.color.lightOrange),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Text(
                         text = page.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White
+                        color = colorResource(id = R.color.black)
                     )
                 }
             }

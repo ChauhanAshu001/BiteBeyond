@@ -80,7 +80,6 @@ fun HomeScreen(
     val uiState= homeViewModel.uiState.collectAsState()
     val locationName=homeViewModel.locationName.collectAsState()
 
-    //navigation logic to details screen of restaurant
 
     LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -94,7 +93,7 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp) // Adjust as needed
+                        .height(200.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.home_screen_background),
@@ -106,8 +105,7 @@ fun HomeScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Bottom
+                            .padding(16.dp,top=40.dp),
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -153,7 +151,8 @@ fun HomeScreen(
                             style = MaterialTheme.typography.headlineSmall.copy(
                                 fontWeight = FontWeight.ExtraBold,
                                 color = Color.White
-                            )
+                            ),
+                            modifier = Modifier.padding(top=40.dp)
                         )
                     }
                 }
