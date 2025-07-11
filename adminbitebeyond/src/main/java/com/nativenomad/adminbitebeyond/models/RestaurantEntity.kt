@@ -2,6 +2,7 @@ package com.nativenomad.adminbitebeyond.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.nativenomad.adminbitebeyond.utils.Constants
 
 @Entity(tableName = "restaurant_table")
 data class RestaurantEntity(
@@ -22,6 +23,7 @@ data class RestaurantEntity(
       and in profile it will always show first row's data because in Dao you're
      doing this
       @Query("SELECT * FROM restaurant_table LIMIT 1") */
+    val uid: String,
     val restaurantName: String,
     val imageUrl: String,
     val restaurantDescription: String,

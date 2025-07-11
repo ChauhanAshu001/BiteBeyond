@@ -1,6 +1,9 @@
 package com.nativenomad.adminbitebeyond.models
 
+import com.nativenomad.adminbitebeyond.utils.Constants
+
 data class Restaurant(
+
     val offers: List<Offers>,
     val distance: String="",
     val imageUrl: String="",

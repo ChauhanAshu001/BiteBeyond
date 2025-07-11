@@ -7,6 +7,7 @@ import java.util.Locale
 import com.nativenomad.adminbitebeyond.domain.repository.RestaurantDataRepo
 import com.nativenomad.adminbitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.adminbitebeyond.models.RestaurantEntity
+import com.nativenomad.adminbitebeyond.utils.GetUid.getUid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -116,6 +117,7 @@ class RestaurantDataRepoImpl(private val application: Application,
     }
     override suspend fun saveRestaurantData() {
         val entity = RestaurantEntity(
+            uid=getUid(),
             id = "admin_restaurant",
             restaurantName = _restaurantName.value,
             imageUrl = _imageUrl.value,

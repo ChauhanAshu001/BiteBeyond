@@ -69,8 +69,8 @@ class HomeViewModel @Inject constructor(
                     val distance = if (userLocation != null)
                         calculateDistanceClass.calculateDistance(
                             userLocation = userLocation,
-                            lat = restaurant.location.lat,
-                            lng = restaurant.location.lng
+                            lat = restaurant.latitude,
+                            lng = restaurant.longitude
                         )
                     else 0.0
                     restaurant.copy(distance = distance.toString())

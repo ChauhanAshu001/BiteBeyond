@@ -29,17 +29,17 @@ class RestaurantDetailViewModel@Inject constructor(
 
 
     //I didn't load menu when i was just loading restaurants for homeScreen because if menu is large I didn't wanted app to become so slow that even home screen loading takes time
-    fun loadMenu(restaurantName: String) {
+    fun loadMenu(restaurantUid: String) {
         viewModelScope.launch {
-            databaseOpUseCases.getMenu(restaurantName).collect { it ->
+            databaseOpUseCases.getMenu(restaurantUid).collect { it ->
                 _menuItems.value = it
             }
         }
     }
 
-    fun loadOffers(restaurantName: String) {
+    fun loadOffers(restaurantUid: String) {
         viewModelScope.launch {
-            databaseOpUseCases.getOffers(restaurantName).collect { it ->
+            databaseOpUseCases.getOffers(restaurantUid).collect { it ->
                 _offers.value = it
             }
         }

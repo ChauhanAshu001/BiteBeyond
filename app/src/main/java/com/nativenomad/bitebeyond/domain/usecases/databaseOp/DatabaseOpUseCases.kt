@@ -7,5 +7,9 @@ data class DatabaseOpUseCases(
     val getOffers: GetOffers,
     val getPromoCodeRestaurantMap: GetPromoCodeRestaurantMap,
     val saveUserData: SaveUserData,
-    val getUserData: GetUserData
+    val getUserData: GetUserData,
+    val getNewOrderIdForUser: GetNewOrderIdForUser,
+    val saveOrderToUserNode: SaveOrderToUserNode,
+    val saveOrderToAdminNode: SaveOrderToAdminNode
+
 )

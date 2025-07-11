@@ -40,14 +40,16 @@ fun RestaurantDetailsScreen(
     distanceKm: String,
     imageUrl: String,
     rating: Float,
+    address:String,
+    restaurantUid:String,
     restaurantDetailViewModel: RestaurantDetailViewModel= hiltViewModel()
 ) {
     val menuItems = restaurantDetailViewModel.menuItems.collectAsState()
     val offers = restaurantDetailViewModel.offers.collectAsState()
 
     LaunchedEffect(restaurantName) {
-        restaurantDetailViewModel.loadMenu(restaurantName)
-        restaurantDetailViewModel.loadOffers(restaurantName)
+        restaurantDetailViewModel.loadMenu(restaurantUid)
+        restaurantDetailViewModel.loadOffers(restaurantUid)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -70,7 +72,7 @@ fun RestaurantDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(Icons.Default.LocationOn, contentDescription = "Location", tint = Color.Red)
-                Text(text = "$distanceKm km", fontWeight = FontWeight.Bold)
+                Text(text = "$distanceKm ", fontWeight = FontWeight.Bold)
             }
         }
 
@@ -85,6 +87,11 @@ fun RestaurantDetailsScreen(
                 restaurantName,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
+            )
+            Text(
+                text=address,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
             )
             Text(
                 "Order delicious food delivered fresh from the restaurant.",

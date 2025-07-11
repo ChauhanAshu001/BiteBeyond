@@ -58,7 +58,7 @@ fun RestaurantCard(restaurant: Restaurants, onClick: () -> Unit) {
         Column(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
                 model = restaurant.imageUrl,
-                contentDescription = restaurant.name,
+                contentDescription = restaurant.restaurantName,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(140.dp)
@@ -68,7 +68,7 @@ fun RestaurantCard(restaurant: Restaurants, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = restaurant.name,
+                text = restaurant.restaurantName,
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1
             )
@@ -132,18 +132,4 @@ fun ShimmerRestaurantCard() {
         }
     }
 }
-@Preview
-@Composable
-private fun PreviewRestaurantCard() {
-    BiteBeyondTheme {
 
-        RestaurantCard(
-            restaurant = Restaurants(
-                "12m", true, "https://images.unsplash.com/photo-1601924582975-4cc3015e6c1f",
-                LocationPoints(28.6139, 77.209), "The Pizza Palace", 4.5
-            ),
-            onClick = {}
-        )
-    }
-
-}

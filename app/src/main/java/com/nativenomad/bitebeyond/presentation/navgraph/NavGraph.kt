@@ -148,22 +148,26 @@ fun NavGraph(
                 MainScreen(navController)
             }
             composable(
-                route = "${Routes.RestaurantDetailScreen.route}/{restaurantName}/{distanceKm}/{imageUrl}/{rating}",
+                route = "${Routes.RestaurantDetailScreen.route}/{restaurantName}/{distanceKm}/{imageUrl}/{rating}/{address}/{restaurantUid}",
                 arguments = listOf(
                     navArgument("restaurantName"){type=NavType.StringType},
                     navArgument("distanceKm") { type = NavType.StringType },
                     navArgument("imageUrl") { type = NavType.StringType },
-                    navArgument("rating"){type=NavType.FloatType}
+                    navArgument("rating"){type=NavType.FloatType},
+                    navArgument("address"){type=NavType.StringType},
+                    navArgument("restaurantUid"){type=NavType.StringType},
                 )
             ) {
                 val restaurantName = it.arguments?.getString("restaurantName") ?: ""
                 val distance = it.arguments?.getString("distanceKm") ?: "0.0"
                 val imageUrl = Uri.decode(it.arguments?.getString("imageUrl") ?: "")
                 val rating=it.arguments?.getFloat("rating")?:0f
+                val address=it.arguments?.getString("address")?:""
+                val restaurantUid=it.arguments?.getString("restaurantUid")?:""
 
                 RestaurantDetailsScreen(
                     restaurantName = restaurantName, distanceKm = distance, imageUrl = imageUrl,
-                    rating =rating)
+                    rating =rating,address=address,restaurantUid=restaurantUid)
             }
 
             composable(route=Routes.SearchScreen.route) {

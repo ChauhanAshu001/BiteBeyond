@@ -28,6 +28,7 @@ class DatabaseOpImpl():DatabaseOp {
 
         //map ensures that only these fields are updated and else entire object under uid is updated and Offers node is deleted because Restaurant Entity don't have Offers node
         val updateMap = mapOf(
+            "uid" to uid,
             "restaurantName" to restaurantEntity.restaurantName,
             "imageUrl" to restaurantEntity.imageUrl,
             "restaurantDescription" to restaurantEntity.restaurantDescription,

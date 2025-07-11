@@ -28,7 +28,7 @@ fun SearchScreen(
 
     val restaurants = homeViewModel.restaurants
     val filteredRestaurants = restaurants.filter {
-        it.name.contains(searchText, ignoreCase = true)
+        it.restaurantName.contains(searchText, ignoreCase = true)
     }
 
 
@@ -57,7 +57,7 @@ fun SearchScreen(
                     restaurant = restaurant,
                     onClick = {
                         val encodedUrl = Uri.encode(restaurant.imageUrl)
-                        navController.navigate("${Routes.RestaurantDetailScreen.route}/${restaurant.name}/${restaurant.distance}/${encodedUrl}/${restaurant.rating}")
+                        navController.navigate("${Routes.RestaurantDetailScreen.route}/${restaurant.restaurantName}/${restaurant.distance}/${encodedUrl}/${restaurant.rating}/${restaurant.address}/${restaurant.uid}")
                     }
                 )
             }

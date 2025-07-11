@@ -1,15 +1,14 @@
 package com.nativenomad.bitebeyond.presentation.cart
 
 
-import android.app.Activity
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.models.FoodItem
-import com.razorpay.Checkout
+import com.nativenomad.bitebeyond.models.Order
+import com.nativenomad.bitebeyond.models.OrderItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -119,5 +118,49 @@ class CartViewModel @Inject constructor(
         }
         else return false
     }
+
+    fun saveOrdersAfterPayment() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val groupedItems = cartItems.value.entries.groupBy { it.key.restaurantUid }
+
+            val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+            for ((restaurantId, entries) in groupedItems) {  /*Since all items in the group share the same restaurant name hence,
+            Getting it from the first item.*/
+                val orderItems = entries.map {
+                    OrderItem(
+                        name = it.key.name,
+                        quantity = it.value,
+                        price = it.key.cost.filter { ch -> ch.isDigit() }.toIntOrNull() ?: 0
+                    )
+                }
+
+                val totalForRestaurant = orderItems.sumOf { it.price * it.quantity }
+                val discountForRestaurant = 0 // adjust if you want to split discount
+                val finalAmount = totalForRestaurant - discountForRestaurant
+
+                val orderId = databaseOpUseCases.getNewOrderIdForUser(userId.toString())
+
+                val order = Order(
+                    orderId = orderId,
+                    restaurantId = restaurantId,
+                    items = orderItems,
+                    totalAmount = totalForRestaurant,
+                    discount = discountForRestaurant,
+                    finalAmount = finalAmount,
+                    address = address.value,
+                    userId = userId.toString(),
+                    status = "Pending",
+                    timestamp = System.currentTimeMillis()
+                )
+
+                databaseOpUseCases.saveOrderToUserNode(userId.toString(), orderId, order)
+                databaseOpUseCases.saveOrderToAdminNode(restaurantId, orderId, order)
+            }
+            clearCart()
+        }
+    }
+
+
 
 }

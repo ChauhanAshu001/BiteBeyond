@@ -33,7 +33,7 @@ class CategoryFoodViewModel@Inject constructor(
                     collect is suspending function the function's execution stop here only to observe any changes in menu of first restaurant and the control never reaches the line
                     finalItems.addAll(filtered)
                     */
-                        databaseOpUseCases.getMenu(restaurant.name).collect { menu ->
+                        databaseOpUseCases.getMenu(restaurant.uid).collect { menu ->
                             val filtered = menu.filter {
                                 it.name.contains(category, ignoreCase = true)
                             }

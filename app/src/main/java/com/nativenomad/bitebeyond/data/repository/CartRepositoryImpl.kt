@@ -1,7 +1,6 @@
 package com.nativenomad.bitebeyond.data.repository
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
 import com.nativenomad.bitebeyond.data.local.CartDao
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
@@ -40,7 +39,8 @@ class CartRepositoryImpl(
                         name = cartEntity.name,
                         cost = cartEntity.cost,
                         imageUrl = cartEntity.imageUrl,
-                        restaurantName = cartEntity.restaurantName
+                        restaurantUid = cartEntity.restaurantUid
+
                     ) to cartEntity.quantity
                 }
                 .toMap()
@@ -65,7 +65,7 @@ class CartRepositoryImpl(
                     name = food.name,
                     cost = food.cost,
                     imageUrl = food.imageUrl,
-                    restaurantName = food.restaurantName,
+                    restaurantUid = food.restaurantUid,
                     quantity = newQty
                 )
             )
@@ -95,7 +95,7 @@ class CartRepositoryImpl(
                         name = food.name,
                         cost = food.cost,
                         imageUrl = food.imageUrl,
-                        restaurantName = food.restaurantName,
+                        restaurantUid = food.restaurantUid,
                         quantity = newQty
                     )
                 )
@@ -105,7 +105,7 @@ class CartRepositoryImpl(
                         name = food.name,
                         cost = food.cost,
                         imageUrl = food.imageUrl,
-                        restaurantName = food.restaurantName,
+                        restaurantUid = food.restaurantUid,
                         quantity = currentQty
                     )
                 )
@@ -138,12 +138,12 @@ class CartRepositoryImpl(
     override suspend fun applyPromoCode(code: String, promoCodeRestaurantMap: Map<String, String>) {
 
         val promoCode=code.trim().uppercase()
-        val targetRestaurant = promoCodeRestaurantMap[promoCode]
+        val targetRestaurantUid = promoCodeRestaurantMap[promoCode]
 
         var hasEligibleItem = false
         var restaurantSpecificTotal=0  //promocode should be applicable only on order total from that restaurant only for which promoCode is valid
         for ( (item,qty ) in cartItems.value.entries.toList()) {
-            if (item.restaurantName == targetRestaurant) {
+            if (item.restaurantUid == targetRestaurantUid) {
                 val cleanedCost = item.cost.replace("\\D".toRegex(), "") //replaces anything that's not a digit (like rupee symbol and comma )to empty string
                 restaurantSpecificTotal += cleanedCost.toIntOrNull()?.times(qty) ?: 0
                 hasEligibleItem = true

@@ -215,7 +215,7 @@ fun HomeScreen(
 
             }
 
-            // Featured Restaurants Header
+            // Restaurants Header
             item {
                 Text(
                     text = "Restaurants",
@@ -260,7 +260,7 @@ fun HomeScreen(
                             Box(modifier = Modifier.weight(1f)) {
                                 RestaurantCard(restaurant = restaurant, onClick = {
                                     val encodedUrl = Uri.encode(restaurant.imageUrl)
-                                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${restaurant.name}/${restaurant.distance}/${encodedUrl}/${restaurant.rating}")})
+                                    navController.navigate("${Routes.RestaurantDetailScreen.route}/${restaurant.restaurantName}/${restaurant.distance}/${encodedUrl}/${restaurant.rating}/${restaurant.address}/${restaurant.uid}")})
                             }
                         }
                         if (row.size == 1) {

@@ -74,7 +74,8 @@ fun CartScreen(cartViewModel: CartViewModel = hiltViewModel(),
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Toast.makeText(context, "Payment successful", Toast.LENGTH_SHORT).show()
-            cartViewModel.clearCart()
+            cartViewModel.saveOrdersAfterPayment()
+//            navController.navigate(Routes.OrderSuccess.route)
         } else {
             Toast.makeText(context, "Payment failed or cancelled", Toast.LENGTH_SHORT).show()
         }
