@@ -10,7 +10,9 @@
     <color name="darkOrange">#B32929</color>
     <color name="lightOrange">#FE8C00</color>
     <color name="lightGreen">#43A407</color>
+    <color name="emeraldGreen">#50C878</color>
     <color name="darkGreen">#228B22</color>
+    <color name="ivory">#FFFFF0</color>
     <color name="indicatorColor">#FFEB3B</color>
     <color name="display_small">#000000</color>
     <color name="text_medium">#FF4E4B66</color>

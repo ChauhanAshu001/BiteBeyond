@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.facebook.CallbackManager
 import com.nativenomad.adminbitebeyond.MainActivity
 import com.nativenomad.adminbitebeyond.R
+import com.nativenomad.adminbitebeyond.presentation.signin_signup.signup.SignUpNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signup.SignUpViewmodel
 
 @Composable
@@ -31,6 +32,7 @@ fun FacebookButton(modifier: Modifier,
     Button(
         onClick = {
             viewModel.onSignInWithFacebookClick(activity, callbackManager)
+
         },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF1877F2),

@@ -1,19 +1,34 @@
 package com.nativenomad.adminbitebeyond.presentation.navGraph
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.nativenomad.adminbitebeyond.presentation.bottomNav.MainScreen
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.locationInfo.LocationInfoNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.locationInfo.LocationInfoScreen
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.locationInfo.LocationInfoViewModel
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.menuAdd.MenuAddNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.menuAdd.MenuAddScreen
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.menuAdd.MenuAddViewModel
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoScreen
+import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoViewModel
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingEvent
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingViewModel
+import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuNavigationEvent
+import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuScreen
+import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuViewModel
+import com.nativenomad.adminbitebeyond.presentation.profile.myAccount.MyAccountScreen
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInScreen
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInViewModel
@@ -80,13 +95,12 @@ fun NavGraph(
                             navController.navigate(Routes.SignInScreen.route)
                         }
 
-                        is SignUpNavigationEvent.NavigateToHome -> {
-                            TODO()
-//                                navController.navigate(Routes.MainScreenNavigation.route) {
-//                                    popUpTo(Routes.SignUpScreen.route) {
-//                                        inclusive = true
-//                                    }
-//                                }
+                        is SignUpNavigationEvent.NavigateToRestaurantInfoScreen -> {
+                            navController.navigate(Routes.RestaurantInfoScreen.route) {
+                                popUpTo(Routes.SignUpScreen.route) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     }
 
@@ -105,12 +119,12 @@ fun NavGraph(
                             navController.navigate(Routes.SignUpScreen.route)
                         }
                         is SignInNavigationEvent.NavigateToHome->{
-                            TODO()
-//                                navController.navigate(Routes.MainScreenNavigation.route){
-//                                    popUpTo(Routes.SignInScreen.route){
-//                                        inclusive=true
-//                                    }
-//                                }
+                            navController.navigate(Routes.MainScreen.route){
+                                    popUpTo(Routes.SignInScreen.route){
+                                        inclusive=true
+                                    }
+                                }
+//
                         }
                     }
                 }
@@ -121,7 +135,81 @@ fun NavGraph(
             })
 
         }
+        composable(Routes.RestaurantInfoScreen.route) {
+            val viewmodel:RestaurantInfoViewModel= hiltViewModel()
+            LaunchedEffect(Unit) {
+                viewmodel.navigateEvent.collectLatest { restaurantInfoNavigationEvent ->
+                    when (restaurantInfoNavigationEvent) {
+                        is RestaurantInfoNavigationEvent.NavigateToLocationInfoScreen -> {
+                            navController.navigate(Routes.LocationInfoScreen.route)
+                        }
+                    }
+                }
+            }
+            RestaurantInfoScreen(onEvent = {restaurantInfoNavigationEvent ->
+                viewmodel.onEvent(restaurantInfoNavigationEvent)
+            })
+        }
 
+        composable(Routes.LocationInfoScreen.route) {
+            val viewmodel:LocationInfoViewModel= hiltViewModel()
+            LaunchedEffect(Unit) {
+                viewmodel.navigateEvent.collectLatest { locationInfoNavigationEvent ->
+                    when (locationInfoNavigationEvent) {
+                        is LocationInfoNavigationEvent.NavigateToMenuAdd -> {
+                            navController.navigate(Routes.MenuAddScreen.route)
+                        }
+                    }
+                }
+            }
+            LocationInfoScreen(
+                onEvent = {locationInfoNavigationEvent ->
+                    viewmodel.onEvent(locationInfoNavigationEvent)
+                }
+            )
+        }
+
+        composable(Routes.MenuAddScreen.route) {
+            val viewmodel:MenuAddViewModel= hiltViewModel()
+            LaunchedEffect(Unit) {
+                viewmodel.navigateEvent.collectLatest { menuAddNavigationEvent ->
+                    when(menuAddNavigationEvent){
+                        is MenuAddNavigationEvent.NavigateToHome->{
+                            navController.navigate(Routes.MainScreen.route)
+                        }
+                    }
+                }
+            }
+            MenuAddScreen(onEvent = {menuAddNavigationEvent ->
+                viewmodel.onEvent(menuAddNavigationEvent)
+            })
+        }
+
+        composable(route=Routes.MainScreen.route) {
+            MainScreen(navController=navController)
+        }
+
+        composable(route=Routes.MyAccountScreen.route) {
+            MyAccountScreen()
+        }
+
+        composable(route=Routes.ModifyMenuScreen.route) {
+            val viewmodel:ModifyMenuViewModel= hiltViewModel()
+            val context= LocalContext.current
+            LaunchedEffect(Unit) {
+                viewmodel.navigateEvent.collectLatest { modifyMenuNavigationEvent ->
+                    when(modifyMenuNavigationEvent){
+                        is ModifyMenuNavigationEvent.NavigateToProfileScreen->{
+
+                            Toast.makeText(context,"Menu Saved",Toast.LENGTH_SHORT).show()
+                            navController.navigate(Routes.MainScreen.route)
+                        }
+                    }
+                }
+            }
+            ModifyMenuScreen(onEvent = {modifyMenuNavigationEvent->
+                viewmodel.onEvent(modifyMenuNavigationEvent)})
+        }
     }
 
 }

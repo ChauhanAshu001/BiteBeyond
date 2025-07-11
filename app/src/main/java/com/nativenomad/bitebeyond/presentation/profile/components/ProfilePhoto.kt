@@ -32,11 +32,8 @@ import com.nativenomad.bitebeyond.presentation.profile.ProfileViewModel
 
 @Composable
 fun ProfilePhoto(photoViewModel: ProfileViewModel= hiltViewModel()) {
-    val selectedImageUri =photoViewModel.imageUrl.collectAsState()
+    val selectedImageUri = photoViewModel.imageUrl.collectAsState()
 
-//    LaunchedEffect (selectedImageUri){
-//
-//    }
     // Image picker launcher
     val context= LocalContext.current
     val launcher = rememberLauncherForActivityResult(

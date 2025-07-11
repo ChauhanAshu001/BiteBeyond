@@ -32,7 +32,6 @@ class CartRepositoryImpl(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        Log.d("CartRepo", "CartRepositoryImpl initialized")
         coroutineScope.launch {
             val savedItems = cartDao.getAllCartItems()      //getAllCartItems is suspend function and hence the coroutine scope
             val restoredMap = savedItems

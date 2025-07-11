@@ -61,6 +61,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //visibility on and off icons are from this library which are used in password field on signin and signup screen
+    implementation(libs.androidx.material.icons.extended)
+
     // Dagger Hilt - Using Kapt
     implementation(libs.hilt.android) // Hilt runtime
     kapt(libs.hilt.compiler)          // Hilt Kapt compiler for main source set
@@ -119,4 +122,13 @@ dependencies {
     implementation("com.facebook.android:facebook-login:18.0.3")
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation ("com.facebook.android:facebook-android-sdk:17.0.2")
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    //used in .await() function used in database operations to change _uiState in viewmodels to show error
+    implementation(libs.kotlinx.coroutines.play.services)
+
+
 }

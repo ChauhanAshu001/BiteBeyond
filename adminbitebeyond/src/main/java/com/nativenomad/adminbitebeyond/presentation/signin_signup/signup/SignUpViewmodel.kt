@@ -53,7 +53,7 @@ class SignUpViewmodel@Inject constructor(
         loginUseCases.createAccountWithEmail(email=email.value,password=password.value).onEach{response->
             if(response is AuthResponse.Success) {
                 _uiState.value= SignUpEvent.Success
-                _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+                _navigateEvent.emit(SignUpNavigationEvent.NavigateToRestaurantInfoScreen)
             }
             else{
                 _uiState.value=SignUpEvent.Error
@@ -66,7 +66,7 @@ class SignUpViewmodel@Inject constructor(
         loginUseCases.signInWithGoogle().onEach{response->
             if(response is AuthResponse.Success) {
                 _uiState.value= SignUpEvent.Success
-                _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+                _navigateEvent.emit(SignUpNavigationEvent.NavigateToRestaurantInfoScreen)
             }
             else{
                 _uiState.value= SignUpEvent.Error
@@ -81,7 +81,7 @@ class SignUpViewmodel@Inject constructor(
         loginUseCases.signInWithFacebook(activity,callbackManager).onEach{response->
             if(response is AuthResponse.Success) {
                 _uiState.value= SignUpEvent.Success
-                _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+                _navigateEvent.emit(SignUpNavigationEvent.NavigateToRestaurantInfoScreen)
             }
             else{
                 _uiState.value= SignUpEvent.Error
@@ -96,9 +96,9 @@ class SignUpViewmodel@Inject constructor(
                 }
             }
 
-            is SignUpNavigationEvent.NavigateToHome -> {
+            is SignUpNavigationEvent.NavigateToRestaurantInfoScreen -> {
                 viewModelScope.launch {
-                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToHome)
+                    _navigateEvent.emit(SignUpNavigationEvent.NavigateToRestaurantInfoScreen)
                 }
             }
 

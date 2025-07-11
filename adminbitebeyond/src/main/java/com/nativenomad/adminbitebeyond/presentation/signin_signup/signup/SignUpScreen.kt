@@ -79,7 +79,7 @@ fun SignUpScreen(
     LaunchedEffect(true) {
         viewModel.navigateEvent.collectLatest {event->
             when(event){
-                is SignUpNavigationEvent.NavigateToHome->{
+                is SignUpNavigationEvent.NavigateToRestaurantInfoScreen->{
                     Toast.makeText(context,"Signup Successful",Toast.LENGTH_SHORT).show()
                 }
                 else -> {
@@ -90,7 +90,8 @@ fun SignUpScreen(
     }
 
 
-    Box(modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()
         .background(Color.White)
         .padding(top = 70.dp)) {
 
@@ -201,7 +202,8 @@ fun SignUpScreen(
 
             // Create Account Button
             Button(
-                onClick =  viewModel::onCreateAccountWithEmailClick,
+                onClick = { viewModel.onCreateAccountWithEmailClick()
+                          onEvent(SignUpNavigationEvent.NavigateToRestaurantInfoScreen)},
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = colorResource(R.color.white),
