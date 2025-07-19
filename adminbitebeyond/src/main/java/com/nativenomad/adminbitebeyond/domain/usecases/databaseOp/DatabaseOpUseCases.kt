@@ -9,5 +9,7 @@ data class DatabaseOpUseCases(
     val addOffer: AddOffer,
     val deleteOffer: DeleteOffer,
     val saveCategoriesGlobally: SaveCategoryGlobally,
-    val getFullMenu: GetFullMenu
+    val getFullMenu: GetFullMenu,
+    val getOrdersForRestaurant: GetOrdersForRestaurant,
+    val updateOrderStatus: UpdateOrderStatus
 )

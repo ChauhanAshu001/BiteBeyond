@@ -20,5 +20,5 @@ interface DatabaseOp {
     suspend fun getNewOrderIdForUser(userId: String): String
     suspend fun saveOrderToUserNode(userId: String, orderId: String, order: Order)
     suspend fun saveOrderToAdminNode(restaurantId: String, orderId: String, order: Order)
-
+    suspend fun getUserOrders():Flow<List<Order>>
 }

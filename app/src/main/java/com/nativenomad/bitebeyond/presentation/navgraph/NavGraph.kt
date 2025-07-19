@@ -23,6 +23,8 @@ import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpViewmodel
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingViewModel
+import com.nativenomad.bitebeyond.presentation.profile.myAccount.MyAccountScreen
+import com.nativenomad.bitebeyond.presentation.profile.pastOrders.PastOrderScreen
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailsScreen
 import com.nativenomad.bitebeyond.presentation.search.SearchScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInNavigationEvent
@@ -181,6 +183,13 @@ fun NavGraph(
             ) {
                 val categoryName = Uri.decode(it.arguments?.getString("categoryName") ?: "")
                 CategoryFoodScreen(category=categoryName, navController = navController)
+            }
+
+            composable(route=Routes.MyAccountScreen.route) {
+                MyAccountScreen(navController = navController)
+            }
+            composable(route = Routes.PastOrderScreen.route){
+                PastOrderScreen()
             }
         }
     }

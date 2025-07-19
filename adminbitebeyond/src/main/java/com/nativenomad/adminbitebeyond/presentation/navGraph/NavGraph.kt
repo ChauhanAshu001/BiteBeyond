@@ -29,6 +29,7 @@ import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMen
 import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuScreen
 import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuViewModel
 import com.nativenomad.adminbitebeyond.presentation.profile.myAccount.MyAccountScreen
+import com.nativenomad.adminbitebeyond.presentation.profile.pastOrders.PastOrderScreen
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInScreen
 import com.nativenomad.adminbitebeyond.presentation.signin_signup.signin.SignInViewModel
@@ -209,6 +210,9 @@ fun NavGraph(
             }
             ModifyMenuScreen(onEvent = {modifyMenuNavigationEvent->
                 viewmodel.onEvent(modifyMenuNavigationEvent)})
+        }
+        composable(route=Routes.PastOrderScreen.route) {
+            PastOrderScreen()
         }
     }
 

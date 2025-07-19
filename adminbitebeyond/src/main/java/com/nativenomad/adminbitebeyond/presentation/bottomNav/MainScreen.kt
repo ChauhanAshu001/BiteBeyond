@@ -1,5 +1,6 @@
 package com.nativenomad.adminbitebeyond.presentation.bottomNav
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -24,6 +25,7 @@ import androidx.navigation.NavController
 import com.nativenomad.adminbitebeyond.R
 import com.nativenomad.adminbitebeyond.models.NavItems
 import com.nativenomad.adminbitebeyond.presentation.OffersScreen.OffersScreen
+import com.nativenomad.adminbitebeyond.presentation.home.HomeScreen
 import com.nativenomad.adminbitebeyond.presentation.menu.MenuScreen
 import com.nativenomad.adminbitebeyond.presentation.profile.ProfileScreen
 
@@ -72,10 +74,10 @@ fun MainScreen(navController: NavController) {
 @Composable
 fun ContentScreen(modifier: Modifier = Modifier, screen: String, navController: NavController) {
     when(screen){
-//        "Home"->HomeScreen(navController=navController)
-        "Offers"->OffersScreen()
-        "Menu"->MenuScreen()
-        "Profile"->ProfileScreen(navController = navController)
-//
+
+            "Home"-> HomeScreen()
+            "Offers"-> OffersScreen()
+            "Menu"-> MenuScreen()
+            "Profile"-> ProfileScreen(navController=navController)
     }
 }

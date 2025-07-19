@@ -10,6 +10,8 @@ data class DatabaseOpUseCases(
     val getUserData: GetUserData,
     val getNewOrderIdForUser: GetNewOrderIdForUser,
     val saveOrderToUserNode: SaveOrderToUserNode,
-    val saveOrderToAdminNode: SaveOrderToAdminNode
+    val saveOrderToAdminNode: SaveOrderToAdminNode,
+    val getUserOrders: GetUserOrders
+
 
 )

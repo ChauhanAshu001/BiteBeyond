@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RestaurantMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -72,7 +70,7 @@ fun OffersScreen(offersViewModel: OffersViewModel= hiltViewModel()) {
                 .padding(paddingValues)  /*It’s a PaddingValues object automatically provided by the Scaffold. It tells you how much space is occupied by the topBar, bottomBar, snackbarHost, etc., so you can avoid overlapping your content with those system elements.*/
                 .padding(horizontal = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = "Offers you can provide",

@@ -1,5 +1,6 @@
 package com.nativenomad.adminbitebeyond.presentation.menu
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nativenomad.adminbitebeyond.R
@@ -49,18 +52,20 @@ fun MenuScreen(menuViewModel: MenuViewModel = hiltViewModel()) {
     ) { paddingValues ->
 
         if (menu.value.isEmpty()) {
-            Box(
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
+                    .padding(top = 150.dp, start = 16.dp, end = 16.dp)
             ) {
-                Text(
-                    text = "No items in the menu yet.",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = colorResource(id=R.color.indicatorColor)
+                Image(
+                    painter = painterResource(id = R.drawable.order_empty),
+                    contentDescription = "No menu",
+                    modifier=Modifier.height(150.dp)
                 )
-
+                Spacer(modifier = Modifier.height(12.dp))
+                Text("Ouch!", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text("No items in the menu yet", color = Color.Gray)
             }
         }
         else {

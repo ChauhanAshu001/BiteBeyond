@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nativenomad.adminbitebeyond.domain.repository.RestaurantDataRepo
-import com.nativenomad.adminbitebeyond.presentation.profile.ProfileEvents
 import com.nativenomad.admnibitebeyond.remote.FreeImageApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +50,7 @@ class MyAccountViewModel@Inject constructor(
     private val _country=restaurantDataRepo.country
     val country=_country.asStateFlow()
 
-    private val _uiState= MutableStateFlow<ProfileEvents>(ProfileEvents.Nothing)
+    private val _uiState= MutableStateFlow<MyAccountEvents>(MyAccountEvents.Nothing)
     val uiState=_uiState.asStateFlow()
 
     fun setRestaurantName(name:String){
@@ -132,7 +131,7 @@ class MyAccountViewModel@Inject constructor(
 
             val bitmap = imageUri.value?.let { uriToBitmap(application, it) }
             if (bitmap != null) {
-                _uiState.value = ProfileEvents.Loading
+                _uiState.value = MyAccountEvents.Loading
                 val resizedImage = resizeBitmap(bitmap)
                 val base64 = encodeImageToBase64(resizedImage)
                 val response = freeImageApi.uploadImage(
@@ -144,7 +143,7 @@ class MyAccountViewModel@Inject constructor(
                     restaurantDataRepo.calculateLatLong()
                     try {
                         restaurantDataRepo.saveRestaurantData()
-                        _uiState.value= ProfileEvents.Success
+                        _uiState.value= MyAccountEvents.Success
                         withContext(Dispatchers.Main) {   //code inside withContext runs on the thread pool which is specified in parenthesis (Dispatchers.IO)
                             Toast.makeText(
                                 application,
@@ -153,23 +152,23 @@ class MyAccountViewModel@Inject constructor(
                             ).show()
                         }
                     }catch (e:Exception){
-                        _uiState.value= ProfileEvents.Error
+                        _uiState.value= MyAccountEvents.Error
                     }
                 }
                 else {
-                    _uiState.value = ProfileEvents.Error
+                    _uiState.value = MyAccountEvents.Error
                 }
             }
             else if(bitmap==null && imageUri.value!=null){
                 //if user changed the image of restaurant but it can't be converted to bitmap then it's an error
-                _uiState.value = ProfileEvents.Error
+                _uiState.value = MyAccountEvents.Error
             }
             else{
                 //maybe user's kept the image he used at entering screen and only changed the data in text fields so this else if block will run
                 restaurantDataRepo.calculateLatLong()
                 try {
                     restaurantDataRepo.saveRestaurantData()
-                    _uiState.value= ProfileEvents.Success
+                    _uiState.value= MyAccountEvents.Success
                     withContext(Dispatchers.Main) {   //code inside withContext runs on the thread pool which is specified in parenthesis (Dispatchers.IO)
                         Toast.makeText(
                             application,
@@ -178,7 +177,7 @@ class MyAccountViewModel@Inject constructor(
                         ).show()
                     }
                 }catch (e:Exception){
-                    _uiState.value= ProfileEvents.Error
+                    _uiState.value= MyAccountEvents.Error
                 }
             }
         }

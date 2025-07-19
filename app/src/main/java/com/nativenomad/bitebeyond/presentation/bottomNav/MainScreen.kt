@@ -75,7 +75,7 @@ fun ContentScreen(modifier: Modifier=Modifier, screen: String,navController: Nav
         "Home"->HomeScreen(navController=navController)
 //        "AI"->AiScreen()
         "Cart"->CartScreen(navController = navController)
-        "Profile"->ProfileScreen(navController = navController)
+        "Profile"-> ProfileScreen(navController = navController)
 
     }
 }

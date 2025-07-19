@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.profile.components
+package com.nativenomad.bitebeyond.presentation.profile.components.myAccount
 
 import android.content.Intent
 import android.net.Uri
@@ -28,11 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.nativenomad.bitebeyond.presentation.profile.ProfileViewModel
+import com.nativenomad.bitebeyond.presentation.profile.myAccount.MyAccountViewmodel
 
 @Composable
-fun ProfilePhoto(photoViewModel: ProfileViewModel= hiltViewModel()) {
-    val selectedImageUri = photoViewModel.imageUrl.collectAsState()
+fun ProfilePhoto(myAccountViewModel: MyAccountViewmodel = hiltViewModel()) {
+    val selectedImageUri = myAccountViewModel.imageUrl.collectAsState()
 
     // Image picker launcher
     val context= LocalContext.current
@@ -42,7 +42,7 @@ fun ProfilePhoto(photoViewModel: ProfileViewModel= hiltViewModel()) {
     ) { uri: Uri? ->
         if (uri != null) {
             context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)        /*In viewmodel I will process this uri on Dispatchers.IO thread pool (in saveUserData function) instead of Dispatchers.Main thread pool hence uri need to persist thread change so this is why this line is added*/
-            photoViewModel.setImageUri(uri)
+            myAccountViewModel.setImageUri(uri)
         }
     }
 

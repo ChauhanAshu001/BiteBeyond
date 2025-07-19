@@ -1,27 +1,26 @@
 package com.nativenomad.adminbitebeyond.presentation.profile
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +30,7 @@ import com.nativenomad.adminbitebeyond.presentation.navGraph.Routes
 import com.nativenomad.adminbitebeyond.presentation.profile.components.ListCard
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(profileViewModel: ProfileViewModel = hiltViewModel(),
                   navController: NavController
@@ -40,43 +40,33 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = hiltViewModel(),
 
     Scaffold(
         topBar = {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp), // customize as needed
-                color = colorResource(id = R.color.emeraldGreen),
-                shadowElevation = 4.dp
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 16.dp, end = 16.dp,top=20.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = restaurantName.value.uppercase(),
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            shadow = Shadow(
+                                color= Color.Gray,
+                                offset = Offset(2f, 2f),  //tells direction and distance of shadow from text, (+,+) means right and down, (+,-) means right and top
+                                blurRadius = 4f  //controls the softness of shadow's edges
+                            )
+                        ),
+                        color = Color.White
+                    )
+                },
+                navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        contentDescription = "Offers Icon",
-                        tint = colorResource(id=R.color.ivory)
+                        contentDescription = "Profile Icon",
+                        tint = Color.White,
+                        modifier = Modifier.padding(start = 16.dp)
                     )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column {
-                        Text(
-                            text = restaurantName.value,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = restaurantDescription.value,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
-                        )
-                    }
-                }
-            }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = colorResource(id = R.color.emeraldGreen)
+                )
+            )
         }
     ) { paddingValues ->
         Column(
@@ -85,6 +75,20 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = hiltViewModel(),
                 .padding(16.dp)
                 .padding(paddingValues)
         ) {
+            Text(
+                text = restaurantDescription.value,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    shadow = Shadow(
+                        color= Color.Gray,
+                        offset = Offset(2f, 2f),
+                        blurRadius = 4f  //controls the softness of shadow's edges
+                        )
+                ),
+                color = colorResource(R.color.black)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
             ListCard(
                 title = "My Account",
                 subtitle = "Edit restaurant data",
@@ -96,7 +100,7 @@ fun ProfileScreen(profileViewModel: ProfileViewModel = hiltViewModel(),
             ListCard(
                 title = "Past Orders",
                 subtitle = "Manage past orders",
-                onClick = { /* Navigate or handle click */ }
+                onClick = { navController.navigate(Routes.PastOrderScreen.route) }
             )
             Spacer(modifier = Modifier.height(16.dp))
 

@@ -23,13 +23,10 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nativenomad.bitebeyond.R
-import com.nativenomad.bitebeyond.models.LocationPoints
 import com.nativenomad.bitebeyond.models.Restaurants
-import com.nativenomad.bitebeyond.ui.theme.BiteBeyondTheme
 
 
 

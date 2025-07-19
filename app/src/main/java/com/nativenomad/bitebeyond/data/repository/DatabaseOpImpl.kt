@@ -3,6 +3,7 @@ package com.nativenomad.bitebeyond.data.repository
 import android.app.Application
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -201,5 +202,34 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
             .child(restaurantId)
             .child(orderId)
             .setValue(order).await()
+    }
+
+    override suspend fun getUserOrders(): Flow<List<Order>> {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        return callbackFlow {
+            val ref = database
+                .getReference("Orders")
+                .child(uid)
+
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val orderList = mutableListOf<Order>()
+                    for (child in snapshot.children) {
+                        val order = child.getValue(Order::class.java)
+                        if (order != null) {
+                            orderList.add(order)
+                        }
+                    }
+                    trySend(orderList).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            ref.addValueEventListener(listener)
+            awaitClose { ref.removeEventListener(listener) }
+        }
     }
 }

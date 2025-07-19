@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.profile.components
+package com.nativenomad.bitebeyond.presentation.profile.components.myAccount
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

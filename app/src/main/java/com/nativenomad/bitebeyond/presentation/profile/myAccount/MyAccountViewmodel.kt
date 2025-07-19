@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.profile
+package com.nativenomad.bitebeyond.presentation.profile.myAccount
 
 import android.app.Application
 import android.graphics.Bitmap
@@ -7,9 +7,6 @@ import android.net.Uri
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +24,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel@Inject constructor(private val application: Application,
+class MyAccountViewmodel@Inject constructor(private val application: Application,
                                           private val freeImageApi: FreeImageApi,
                                           private val profileDataRepository: ProfileDataRepository,
                                           private val databaseOpUseCases: DatabaseOpUseCases
@@ -51,7 +48,7 @@ class ProfileViewModel@Inject constructor(private val application: Application,
     private val _imageUrl = profileDataRepository.imageUrl
     val imageUrl = _imageUrl.asStateFlow()
 
-    private val _uiState = MutableStateFlow<ProfileEvent>(ProfileEvent.Nothing)
+    private val _uiState = MutableStateFlow<MyAccountEvent>(MyAccountEvent.Nothing)
     val uiState = _uiState.asStateFlow()
 
 
@@ -118,7 +115,7 @@ class ProfileViewModel@Inject constructor(private val application: Application,
         viewModelScope.launch(Dispatchers.IO) {
 
             if (uid != "null") {
-                _uiState.value = ProfileEvent.Loading
+                _uiState.value = MyAccountEvent.Loading
                 val bitmap = uri?.let { uriToBitmap(context, it) }
                 if (bitmap != null) {
                     val resizedImage = resizeBitmap(bitmap)
@@ -136,7 +133,7 @@ class ProfileViewModel@Inject constructor(private val application: Application,
                             phoneNumber = phoneNumber
                         )
                         profileDataRepository.saveUserData(userId = uid, user = user)
-                        _uiState.value = ProfileEvent.Success
+                        _uiState.value = MyAccountEvent.Success
                         withContext(Dispatchers.Main) {
                             Toast.makeText(
                                 application,
@@ -145,7 +142,7 @@ class ProfileViewModel@Inject constructor(private val application: Application,
                             ).show()
                         }       //code inside withContext runs on the thread pool which is specified in parenthesis (Dispatchers.IO)
                     } else {
-                        _uiState.value = ProfileEvent.Failed
+                        _uiState.value = MyAccountEvent.Failed
                     }
                 }
             } else {

@@ -123,7 +123,7 @@ class CartViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val groupedItems = cartItems.value.entries.groupBy { it.key.restaurantUid }
 
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
+            val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
             for ((restaurantId, entries) in groupedItems) {  /*Since all items in the group share the same restaurant name hence,
             Getting it from the first item.*/
@@ -136,10 +136,10 @@ class CartViewModel @Inject constructor(
                 }
 
                 val totalForRestaurant = orderItems.sumOf { it.price * it.quantity }
-                val discountForRestaurant = 0 // adjust if you want to split discount
+                val discountForRestaurant = 0 // adjust it
                 val finalAmount = totalForRestaurant - discountForRestaurant
 
-                val orderId = databaseOpUseCases.getNewOrderIdForUser(userId.toString())
+                val orderId = databaseOpUseCases.getNewOrderIdForUser(userId)
 
                 val order = Order(
                     orderId = orderId,
@@ -149,12 +149,12 @@ class CartViewModel @Inject constructor(
                     discount = discountForRestaurant,
                     finalAmount = finalAmount,
                     address = address.value,
-                    userId = userId.toString(),
+                    userId = userId,
                     status = "Pending",
                     timestamp = System.currentTimeMillis()
                 )
 
-                databaseOpUseCases.saveOrderToUserNode(userId.toString(), orderId, order)
+                databaseOpUseCases.saveOrderToUserNode(userId, orderId, order)
                 databaseOpUseCases.saveOrderToAdminNode(restaurantId, orderId, order)
             }
             clearCart()

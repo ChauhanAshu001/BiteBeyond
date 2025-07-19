@@ -1,4 +1,4 @@
-package com.nativenomad.adminbitebeyond.presentation.profile.components
+package com.nativenomad.bitebeyond.presentation.profile.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Card
@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.nativenomad.adminbitebeyond.R
+import com.nativenomad.bitebeyond.R
 
 @Composable
 fun ListCard(title:String,subtitle:String,onClick:()->Unit) {
@@ -47,7 +47,7 @@ fun ListCard(title:String,subtitle:String,onClick:()->Unit) {
                     text = title,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
-                    color = colorResource(id = R.color.lightGreen)
+                    color = colorResource(id = R.color.lightOrange)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

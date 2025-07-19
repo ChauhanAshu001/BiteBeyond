@@ -7,7 +7,7 @@ import java.util.Locale
 import com.nativenomad.adminbitebeyond.domain.repository.RestaurantDataRepo
 import com.nativenomad.adminbitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.adminbitebeyond.models.RestaurantEntity
-import com.nativenomad.adminbitebeyond.utils.GetUid.getUid
+import com.nativenomad.adminbitebeyond.utils.UtilityFunction.getUid
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

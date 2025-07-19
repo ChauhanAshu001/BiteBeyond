@@ -11,8 +11,9 @@ import com.google.firebase.database.getValue
 import com.nativenomad.adminbitebeyond.domain.repository.DatabaseOp
 import com.nativenomad.adminbitebeyond.models.Menu
 import com.nativenomad.adminbitebeyond.models.Offers
+import com.nativenomad.adminbitebeyond.models.Order
 import com.nativenomad.adminbitebeyond.models.RestaurantEntity
-import com.nativenomad.adminbitebeyond.utils.GetUid.getUid
+import com.nativenomad.adminbitebeyond.utils.UtilityFunction.getUid
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -101,7 +102,6 @@ class DatabaseOpImpl():DatabaseOp {
             awaitClose { menuRef.removeEventListener(listener) }
         }
     }
-
 
     override suspend fun removeMenuItem(menuItem: Menu) {
         val uid=getUid() //don't make it global to class because class is initialised by hilt as soon as app is opened but at that time user may not be logged in hence uid=null
@@ -201,6 +201,52 @@ class DatabaseOpImpl():DatabaseOp {
                 break
             }
         }
+    }
+
+    override suspend fun getOrdersForRestaurant(): Flow<List<Order>> {
+        return callbackFlow {
+            val uid= getUid()
+            val ref=database.getReference("AdminOrders").child(uid)
+            val listener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val orderList = mutableListOf<Order>()
+                    for (child in snapshot.children) {
+                        val order = child.getValue(Order::class.java)
+                        if (order != null) {
+                            orderList.add(order)
+                        }
+                    }
+                    trySend(orderList).isSuccess
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    close(error.toException())
+                }
+            }
+
+            ref.addValueEventListener(listener)
+            awaitClose { ref.removeEventListener(listener) }
+        }
+    }
+
+    override suspend fun updateOrderStatus(
+        restaurantId: String,
+        userId:String,
+        orderId: String,
+        newStatus: String
+    ) {
+
+        database.getReference("AdminOrders")
+            .child(restaurantId)
+            .child(orderId)
+            .child("status")
+            .setValue(newStatus).await()
+
+        database.getReference("Orders")
+            .child(userId)
+            .child(orderId)
+            .child("status")
+            .setValue(newStatus).await()
     }
 
 
