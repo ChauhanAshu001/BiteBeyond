@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nativenomad.bitebeyond.domain.repository.CartRepository
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
 import com.nativenomad.bitebeyond.models.FoodItem
+import com.nativenomad.bitebeyond.models.Restaurants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,29 +20,57 @@ class CategoryFoodViewModel@Inject constructor(
     private val cartRepository: CartRepository
 ) : ViewModel()  {
 
-    private val _categoryFoodList=MutableStateFlow<List<FoodItem>>(emptyList())
+    private val _categoryFoodList=MutableStateFlow<List<Pair<Restaurants,FoodItem>>>(emptyList())
     val categoryFoodList=_categoryFoodList.asStateFlow()
+
+//    fun loadFoodItemsByCategory(category: String) {
+//        viewModelScope.launch {
+//            val finalItems = mutableListOf<FoodItem>()
+//            databaseOpUseCases.getRestaurants().collectLatest { restaurants ->
+//                finalItems.clear()
+//
+//                restaurants.forEach { restaurant ->
+//                    launch {    /*if you don't launch a new coroutine scope for each restaurant,then the menu of first restaurant will only be fetched and then since
+//                    collect is suspending function the function's execution stop here only to observe any changes in menu of first restaurant and the control never reaches the line
+//                    finalItems.addAll(filtered)
+//                    */
+//                        databaseOpUseCases.getMenu(restaurant.uid).collect { menu ->
+//                            val filtered = menu.filter {
+//                                it.foodCategory.contains(category, ignoreCase = true)
+//                            }
+//                            finalItems.addAll(filtered)
+//
+//                            // Update state after each restaurant's menu is processed
+//                            _categoryFoodList.value = finalItems.toList()
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     fun loadFoodItemsByCategory(category: String) {
         viewModelScope.launch {
-            val finalItems = mutableListOf<FoodItem>()
+            val finalItems = mutableListOf<Pair<Restaurants, FoodItem>>()
+
             databaseOpUseCases.getRestaurants().collectLatest { restaurants ->
                 finalItems.clear()
 
                 restaurants.forEach { restaurant ->
-                    launch {    /*if you don't launch a new coroutine scope for each restaurant,then the menu of first restaurant will only be fetched and then since
-                    collect is suspending function the function's execution stop here only to observe any changes in menu of first restaurant and the control never reaches the line
-                    finalItems.addAll(filtered)
-                    */
+                    launch {
                         databaseOpUseCases.getMenu(restaurant.uid).collect { menu ->
                             val filtered = menu.filter {
-                                it.name.contains(category, ignoreCase = true)
+                                it.foodCategory.contains(category, ignoreCase = true)
                             }
-                            finalItems.addAll(filtered)
 
-                            // Update state after each restaurant's menu is processed
+                            // Add each item as a Pair of restaurant name and FoodItem
+                            finalItems.addAll(filtered.map { foodItem ->
+                                restaurant to foodItem
+                            })
+
+                            // Update state with the list of pairs
                             _categoryFoodList.value = finalItems.toList()
-
                         }
                     }
                 }

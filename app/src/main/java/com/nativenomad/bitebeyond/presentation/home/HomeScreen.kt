@@ -174,12 +174,7 @@ fun HomeScreen(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = "See All",
-                        color = Color(0xFFFF7B00),
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.clickable { /* See All */ }
-                    )
+
                 }
             }
 

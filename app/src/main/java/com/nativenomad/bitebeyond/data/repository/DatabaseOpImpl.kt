@@ -85,7 +85,8 @@ class DatabaseOpImpl(private val application: Application) : DatabaseOp {
                         val name = it.child("name").getValue<String>() ?: return@mapNotNull null
                         val cost = it.child("cost").getValue<String>()  ?: return@mapNotNull null
                         val imageUrl = it.child("imageUrl").getValue<String>()  ?: return@mapNotNull null
-                        FoodItem(name, cost, imageUrl,restaurantUid)
+                        val foodCategory=it.child("foodCategory").getValue<String>()?: return@mapNotNull null
+                        FoodItem(name, cost, imageUrl,restaurantUid,foodCategory)
                     }
                     trySend(list).isSuccess
                 }

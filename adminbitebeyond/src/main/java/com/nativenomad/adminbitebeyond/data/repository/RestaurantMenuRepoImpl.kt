@@ -37,6 +37,7 @@ class RestaurantMenuRepoImpl(private val databaseOpUseCases: DatabaseOpUseCases)
         _menu.value=currentList
 
        databaseOpUseCases.removeMenuItem(menuItem)
+       databaseOpUseCases.removeCategoryGlobally(menuItem)
 
     }
 

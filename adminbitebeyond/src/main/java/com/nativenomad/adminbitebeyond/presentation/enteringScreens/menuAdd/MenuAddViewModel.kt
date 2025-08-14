@@ -115,11 +115,12 @@ class MenuAddViewModel@Inject constructor(
                     val menuItem = Menu(
                         name = name,
                         imageUrl = imageUrl1,
-                        cost = cost,
+                        cost = "${cost}Rs",
                         foodCategory = foodCategory
                     )
                     try{
                         restaurantMenuRepo.addItem(menuItem)
+                        restaurantMenuRepo.addCategoryGlobally(menuItem)
                         _uiState.value = MenuAddEvent.Success
                         withContext(Dispatchers.Main) {   //code inside withContext runs on the thread pool which is specified in parenthesis (Dispatchers.IO)
                             Toast.makeText(

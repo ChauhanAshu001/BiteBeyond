@@ -49,7 +49,7 @@ fun CategoryFoodScreen(
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             items(items.value) { item ->
-                CategoryFoodCard(food = item,onEvent = categoryFoodViewModel::onEvent)
+                CategoryFoodCard(food = item.second, restaurant = item.first,onEvent = categoryFoodViewModel::onEvent)
             }
         }
     }

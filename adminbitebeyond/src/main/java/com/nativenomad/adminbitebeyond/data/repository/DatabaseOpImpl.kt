@@ -56,29 +56,33 @@ class DatabaseOpImpl():DatabaseOp {
 
         menuRef.child(nextIndex.toString()).setValue(menuItem).await() // also throws on failure
     }
-    override suspend fun saveCategoriesGlobally(menuItem: Menu){
+
+    override suspend fun saveCategoriesGlobally(menuItem: Menu) {
         val categoriesRef = database.getReference("Categories")
         val capitalizedCategory = menuItem.foodCategory.trim().uppercase()
 
-        // Checking if this category already exists
+        // Fetch current categories
         val snapshot = categoriesRef.get().await()
+
+        // Check if category already exists
         val exists = snapshot.children.any { child ->
-            val existingCategory = child.child("foodCategory").getValue(String::class.java)
+            val existingCategory = child.child("name").getValue(String::class.java)
             existingCategory?.trim()?.uppercase() == capitalizedCategory
         }
 
         if (!exists) {
-            // Adding new global category if it don't exist
-            val nextIndex = snapshot.childrenCount.toInt()
+            // Add new category
+            val nextIndex = "-C${snapshot.childrenCount+1}" // Matches C0, C1, C2... format
 
             val categoryData = mapOf(
-                "imageUrl" to menuItem.imageUrl,
-                "foodCategory" to capitalizedCategory
+                "iconUrl" to menuItem.imageUrl, // match your DB key
+                "name" to capitalizedCategory
             )
 
-            categoriesRef.child(nextIndex.toString()).setValue(categoryData).await()
+            categoriesRef.child(nextIndex).setValue(categoryData).await()
         }
     }
+
 
     override suspend fun getFullMenu():Flow<List<Menu>>{
         val uid= getUid()
@@ -119,6 +123,33 @@ class DatabaseOpImpl():DatabaseOp {
                 child.ref.removeValue().await() // throws if fails
                 break
             }
+        }
+    }
+
+    override suspend fun removeCategoryGlobally(menuItem: Menu) {
+        //This function is used when menu card's delete icon is pressed
+        try {
+            val categoriesRef = database.getReference("Categories")
+            val capitalizedCategory = menuItem.foodCategory.trim().uppercase()
+
+            // Get all categories
+            val snapshot = categoriesRef.get().await()
+
+            // Find the category key to remove
+            val categoryToRemove = snapshot.children.firstOrNull { child ->
+                val existingCategory = child.child("name").getValue(String::class.java)
+                existingCategory?.trim()?.uppercase() == capitalizedCategory
+            }?.key
+
+            if (categoryToRemove != null) {
+                // Remove category
+                categoriesRef.child(categoryToRemove).removeValue().await()
+                Log.d("RemoveCategory", "Category removed: $capitalizedCategory")
+            } else {
+                Log.d("RemoveCategory", "Category not found: $capitalizedCategory")
+            }
+        } catch (e: Exception) {
+            Log.e("RemoveCategory", "Error removing category", e)
         }
     }
 

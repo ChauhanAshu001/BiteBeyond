@@ -35,91 +35,122 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.models.FoodItem
+import com.nativenomad.bitebeyond.models.Restaurants
 import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreenEvents
-import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailEvents
+
 
 @Composable
-fun CategoryFoodCard(food:FoodItem,
-                     onEvent:(CategoryFoodScreenEvents,FoodItem)->Unit) {
-    val count= remember { mutableStateOf(0) }
+fun CategoryFoodCard(
+    food: FoodItem,
+    restaurant: Restaurants,
+    onEvent: (CategoryFoodScreenEvents, FoodItem) -> Unit
+) {
+    val count = remember { mutableStateOf(0) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 4.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.Top
-        ) {
-            // Food Image
-            AsyncImage(
-                model = food.imageUrl,
-                contentDescription = food.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(90.dp)
-                    .clip(RoundedCornerShape(12.dp))
+        Column(modifier = Modifier.padding(12.dp)) {
+
+            //  Restaurant Name
+            Text(
+                text = restaurant.restaurantName,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(R.color.darkOrange),
+                modifier = Modifier.padding(bottom = 4.dp)
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
-
-            // Name and Price
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 4.dp)
+            Row(
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = food.name,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = food.cost,
-                    color = colorResource(id = R.color.lightOrange),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            // Quantity + Add to Cart
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                // + - Counter
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                //  Food Image
+                AsyncImage(
+                    model = food.imageUrl,
+                    contentDescription = food.name,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                        .size(90.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Food Info
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = 4.dp)
                 ) {
-                    IconButton(onClick = {onEvent(CategoryFoodScreenEvents.onMinusClicked,food)
-                        count.value--
-                    }) {
-                        Icon(Icons.Default.Remove, contentDescription = "Minus")
-                    }
+                    // Food Name (Second Most Prominent)
                     Text(
-                        text=count.value.toString(),
-                        modifier = Modifier.width(24.dp),
-                        textAlign = TextAlign.Center,
+                        text = food.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Restaurant Address
+                    Text(
+                        text = restaurant.address,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.DarkGray
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Price
+                    Text(
+                        text = food.cost,
+                        color = colorResource(id = R.color.lightOrange),
+                        style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium
                     )
-                    IconButton(onClick = { onEvent(CategoryFoodScreenEvents.onPlusClicked,food)
-                        count.value++
-                    }) {
-                        Icon(Icons.Default.Add, contentDescription = "Plus")
-                    }
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
+                //  Quantity Controls
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
+                        IconButton(onClick = {
+                            onEvent(CategoryFoodScreenEvents.onMinusClicked, food)
+                            count.value--
+                        }) {
+                            Icon(Icons.Default.Remove, contentDescription = "Minus")
+                        }
+                        Text(
+                            text = count.value.toString(),
+                            modifier = Modifier.width(24.dp),
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium
+                        )
+                        IconButton(onClick = {
+                            onEvent(CategoryFoodScreenEvents.onPlusClicked, food)
+                            count.value++
+                        }) {
+                            Icon(Icons.Default.Add, contentDescription = "Plus")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                }
             }
         }
     }

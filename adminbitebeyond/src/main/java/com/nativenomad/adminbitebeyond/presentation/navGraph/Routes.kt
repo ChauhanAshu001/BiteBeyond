@@ -12,4 +12,8 @@ sealed class Routes(val route:String) {
     object MyAccountScreen:Routes(route="myAccountScreen")
     object ModifyMenuScreen:Routes(route="modifyMenuScreen")
     object PastOrderScreen:Routes(route="pastOrderScreen")
+    object HomeScreen:Routes(route="homeScreen")
+    object OfferScreen:Routes(route="offerScreen")
+    object MenuScreen:Routes(route="menuScreen")
+    object ProfileScreen:Routes(route="profileScreen")
 }

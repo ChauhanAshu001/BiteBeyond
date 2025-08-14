@@ -11,5 +11,6 @@ data class DatabaseOpUseCases(
     val saveCategoriesGlobally: SaveCategoryGlobally,
     val getFullMenu: GetFullMenu,
     val getOrdersForRestaurant: GetOrdersForRestaurant,
-    val updateOrderStatus: UpdateOrderStatus
+    val updateOrderStatus: UpdateOrderStatus,
+    val removeCategoryGlobally: RemoveCategoryGlobally
 )

@@ -18,5 +18,6 @@ interface DatabaseOp {
     suspend fun getFullMenu():Flow<List<Menu>>
     suspend fun getOrdersForRestaurant(): Flow<List<Order>>
     suspend fun updateOrderStatus(restaurantId: String,userId:String, orderId: String, newStatus: String)
+    suspend fun removeCategoryGlobally(menuItem: Menu)
 
 }

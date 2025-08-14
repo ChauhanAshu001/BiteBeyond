@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nativenomad.adminbitebeyond.presentation.OffersScreen.OffersScreen
 import com.nativenomad.adminbitebeyond.presentation.bottomNav.MainScreen
 import com.nativenomad.adminbitebeyond.presentation.enteringScreens.locationInfo.LocationInfoNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.enteringScreens.locationInfo.LocationInfoScreen
@@ -22,9 +23,12 @@ import com.nativenomad.adminbitebeyond.presentation.enteringScreens.menuAdd.Menu
 import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoScreen
 import com.nativenomad.adminbitebeyond.presentation.enteringScreens.restaurantInfo.RestaurantInfoViewModel
+import com.nativenomad.adminbitebeyond.presentation.home.HomeScreen
+import com.nativenomad.adminbitebeyond.presentation.menu.MenuScreen
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingEvent
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.adminbitebeyond.presentation.onboarding.OnBoardingViewModel
+import com.nativenomad.adminbitebeyond.presentation.profile.ProfileScreen
 import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuNavigationEvent
 import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuScreen
 import com.nativenomad.adminbitebeyond.presentation.profile.modifyMenu.ModifyMenuViewModel
@@ -187,7 +191,7 @@ fun NavGraph(
         }
 
         composable(route=Routes.MainScreen.route) {
-            MainScreen(navController=navController)
+            MainScreen(navController)
         }
 
         composable(route=Routes.MyAccountScreen.route) {
@@ -214,6 +218,20 @@ fun NavGraph(
         composable(route=Routes.PastOrderScreen.route) {
             PastOrderScreen()
         }
+
+//        composable(route=Routes.HomeScreen.route){
+//            HomeScreen()
+//        }
+//        composable(route=Routes.OfferScreen.route){
+//            OffersScreen()
+//        }
+//        composable(route=Routes.MenuScreen.route){
+//            MenuScreen()
+//        }
+//        composable(route=Routes.ProfileScreen.route){
+//            ProfileScreen(navController=navController)
+//        }
+
     }
 
 }
