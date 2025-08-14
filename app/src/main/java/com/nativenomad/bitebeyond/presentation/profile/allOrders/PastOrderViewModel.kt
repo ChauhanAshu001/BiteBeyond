@@ -1,6 +1,5 @@
-package com.nativenomad.bitebeyond.presentation.profile.pastOrders
+package com.nativenomad.bitebeyond.presentation.profile.allOrders
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nativenomad.bitebeyond.domain.usecases.databaseOp.DatabaseOpUseCases
@@ -22,8 +21,7 @@ class PastOrderViewModel@Inject constructor(
 
         viewModelScope.launch {
             databaseOpUseCases.getUserOrders().collect {allOrders->
-                _orders.value = allOrders.filter { it.status.lowercase() == "delivered" }
-                    .sortedByDescending { it.timestamp }
+                _orders.value = allOrders.sortedByDescending { it.timestamp }
             }
         }
     }

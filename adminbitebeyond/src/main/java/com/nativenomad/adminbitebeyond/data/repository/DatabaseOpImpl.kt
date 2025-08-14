@@ -15,8 +15,10 @@ import com.nativenomad.adminbitebeyond.models.Order
 import com.nativenomad.adminbitebeyond.models.RestaurantEntity
 import com.nativenomad.adminbitebeyond.utils.UtilityFunction.getUid
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class DatabaseOpImpl():DatabaseOp {
@@ -235,19 +237,54 @@ class DatabaseOpImpl():DatabaseOp {
         orderId: String,
         newStatus: String
     ) {
+        coroutineScope {
+            //Both these launch run on the same thread pools as the parent function 'updateOrderStatus' but they will be child coroutines of parent function.
+            //If parent coroutines cancels then both these children also cancels
+            /*
+            How did you make them child coroutines of parent coroutine/function???
 
-        database.getReference("AdminOrders")
-            .child(restaurantId)
-            .child(orderId)
-            .child("status")
-            .setValue(newStatus).await()
+              ANSWER: while starting coroutineScope this time I didn't specify (Dispatcher.IO) or anything
+              hence the coroutineScope created inherits the current coroutine context from the function that called it.
+              -> Any launch inside it automatically becomes a child coroutine of that scope.
+              -> If the parent (your updateOrderStatus function’s coroutine) is cancelled → both children are cancelled.
+              -> If any child fails → the scope cancels all children and throws the error to the parent.
+              -> The updateOrderStatus function does not return until all child coroutines finish.
 
-        database.getReference("Orders")
-            .child(userId)
-            .child(orderId)
-            .child("status")
-            .setValue(newStatus).await()
+
+            */
+
+            /*
+
+                What normally happens without coroutineScope???
+
+                If you do:
+
+                CoroutineScope(Dispatchers.IO).launch { ... }
+
+
+                You’ve created a completely new scope that is not tied to the function that created it.
+
+                That coroutine is “orphaned” — it keeps running even if the caller is cancelled or finishes.
+
+                This is called unstructured concurrency and can lead to memory leaks or unfinished work.            */
+
+
+            launch {
+                database.getReference("AdminOrders")
+                    .child(restaurantId)
+                    .child(orderId)
+                    .child("status")
+                    .setValue(newStatus).await()
+            }
+
+            launch {
+                database.getReference("Orders")
+                    .child(userId)
+                    .child(orderId)
+                    .child("status")
+                    .setValue(newStatus).await()
+            }
+        }
     }
-
 
 }

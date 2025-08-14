@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.nativenomad.bitebeyond.presentation.aiModel.AiScreen
 import com.nativenomad.bitebeyond.presentation.bottomNav.MainScreen
 import com.nativenomad.bitebeyond.presentation.categoryFood.CategoryFoodScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingEvent
@@ -23,8 +24,8 @@ import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signUp.SignUpViewmodel
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingScreen
 import com.nativenomad.bitebeyond.presentation.onboarding.OnBoardingViewModel
+import com.nativenomad.bitebeyond.presentation.profile.allOrders.AllOrdersScreen
 import com.nativenomad.bitebeyond.presentation.profile.myAccount.MyAccountScreen
-import com.nativenomad.bitebeyond.presentation.profile.pastOrders.PastOrderScreen
 import com.nativenomad.bitebeyond.presentation.restaurantDetails.RestaurantDetailsScreen
 import com.nativenomad.bitebeyond.presentation.search.SearchScreen
 import com.nativenomad.bitebeyond.presentation.signIn_signUp.signIn.SignInNavigationEvent
@@ -189,7 +190,10 @@ fun NavGraph(
                 MyAccountScreen(navController = navController)
             }
             composable(route = Routes.PastOrderScreen.route){
-                PastOrderScreen()
+                AllOrdersScreen()
+            }
+            composable(route=Routes.AiScreen.route){
+                AiScreen()
             }
         }
     }

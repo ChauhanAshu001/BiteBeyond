@@ -14,5 +14,6 @@ sealed class Routes(val route:String) {
     object CategoryFoodScreen:Routes(route="CategoryFoodScreen")
     object MyAccountScreen:Routes(route = "myAccountScreen")
     object PastOrderScreen:Routes(route = "pastOrderScreen")
+    object AiScreen:Routes(route="AiScreen")
 
 }

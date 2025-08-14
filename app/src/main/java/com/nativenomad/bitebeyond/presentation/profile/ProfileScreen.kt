@@ -88,8 +88,8 @@ fun ProfileScreen(navController:NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             ListCard(
-                title = "Past Orders",
-                subtitle = "Manage past orders",
+                title = "All Orders",
+                subtitle = "Manage all your orders",
                 onClick = { navController.navigate(Routes.PastOrderScreen.route)}
             )
             Spacer(modifier = Modifier.height(16.dp))

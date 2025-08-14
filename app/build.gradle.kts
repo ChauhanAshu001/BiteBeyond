@@ -159,6 +159,10 @@ dependencies {
     //razorpay
     implementation ("com.razorpay:checkout:1.6.41")
 
+    //tensorflow Lite
+    implementation (libs.tensorflow.lite)
+    implementation (libs.tensorflow.lite.support)  //used in loadMappedFile() function in AiViewModel.kt class
+
 
 }
 

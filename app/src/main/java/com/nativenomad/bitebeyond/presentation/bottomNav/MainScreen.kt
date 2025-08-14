@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.nativenomad.bitebeyond.R
 import com.nativenomad.bitebeyond.models.NavItems
+import com.nativenomad.bitebeyond.presentation.aiModel.BotIntroScreen
 import com.nativenomad.bitebeyond.presentation.cart.CartScreen
 import com.nativenomad.bitebeyond.presentation.home.HomeScreen
 import com.nativenomad.bitebeyond.presentation.profile.ProfileScreen
@@ -73,7 +74,7 @@ fun MainScreen(navController: NavController) {
 fun ContentScreen(modifier: Modifier=Modifier, screen: String,navController: NavController) {
     when(screen){
         "Home"->HomeScreen(navController=navController)
-//        "AI"->AiScreen()
+        "AI"-> BotIntroScreen(navController=navController)
         "Cart"->CartScreen(navController = navController)
         "Profile"-> ProfileScreen(navController = navController)
 

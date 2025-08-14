@@ -1,4 +1,4 @@
-package com.nativenomad.bitebeyond.presentation.profile.pastOrders
+package com.nativenomad.bitebeyond.presentation.profile.allOrders
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -37,7 +37,7 @@ import com.nativenomad.bitebeyond.utils.FormatTimeStamp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PastOrderScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
+fun AllOrdersScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
     val orders=pastOrderViewModel.orders.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -48,7 +48,7 @@ fun PastOrderScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Past Orders",
+                        text = "All Orders",
                         style = MaterialTheme.typography.titleLarge,
                         color = Color.White
                     )
@@ -56,7 +56,7 @@ fun PastOrderScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.History,
-                        contentDescription = "Past Orders Icon",
+                        contentDescription = "All Orders Icon",
                         tint = Color.White,
                         modifier = Modifier.padding(start = 16.dp)
                     )
@@ -98,6 +98,13 @@ fun PastOrderScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
                             containerColor = colorResource(R.color.white)
                         )
                     ) {
+                        val statusEmoji = when (order.status.lowercase()) {
+                            "pending" -> "\uD83D\uDD52"     // 🕒 Clock (Pending)
+                            "accepted" -> "\u2705"          // ✅ Check Mark (Accepted)
+                            "dispatched" -> "\uD83D\uDE9A"  // 🚚 Delivery Truck (Dispatched)
+                            "delivered" -> "\uD83D\uDCE6"   // 📦 Package (Delivered)
+                            else -> "\u2753"                // ❓ Question Mark (Unknown)
+                        }
                         Text(
                             text = "\uD83D\uDC64 User ID: ${order.userId}",
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
@@ -115,6 +122,12 @@ fun PastOrderScreen(pastOrderViewModel: PastOrderViewModel= hiltViewModel()) {
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                             modifier = Modifier.padding(bottom = 4.dp),
                             color= colorResource(R.color.lightOrange)
+                        )
+                        Text(
+                            text = "$statusEmoji Order Status: ${order.status}",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.padding(bottom = 4.dp),
+                            color= Color.Red
                         )
                         Text(
                             text = "Ordered at: ${FormatTimeStamp().formatTimeStamp(order.timestamp)}",
