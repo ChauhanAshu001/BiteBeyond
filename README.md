@@ -38,7 +38,7 @@ I also experimented with integrating **AI-based food suggestions** for a persona
 ### Steps to Run
 1. Clone the repository  
    ```bash
-   git clone https://github.com/<your-username>/BiteBeyond.git
+   git clone https://github.com/ChauhanAshu001/BiteBeyond.git
 2. Open in Android Studio
 
 3. Add your own google-services.json for Firebase
