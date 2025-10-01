@@ -11,9 +11,9 @@ I also experimented with integrating **AI-based food suggestions** for a persona
 - 🍽️ Browse restaurants and their menus.  
 - 🛒 Add items to cart & manage quantity.  
 - 💸 Apply promo codes & calculate discounts.  
-- 📍 Location's distance indicator (in Km) based on your location. 
+- 📍 Restaurant's distance indicator (in Km) based on your location. 
 - 🤖 AI-powered food recommendations bases on time you have and cuisine you want. 
-- 📦 Place and track orders current order and also see past orders.
+- 📦 Place and track current order and also see past orders.
 - 🧑‍💼 Admin App for Restaurant owners to let them see pending and past orders, view and modify current menu, view past orders and change restaurant's information like image, description and address etc.
 
 ---
