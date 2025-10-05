@@ -64,12 +64,17 @@ I also experimented with integrating **AI-based food suggestions** for a persona
       <img src="app/src/main/assets/searchRestaurant.jpeg" width="150"/><br/>
       <sub><b>Search Screen</b></sub>
     </td>
-   <td align="center">
+     <td align="center">
       <img src="app/src/main/assets/AiScreen.jpeg" width="150"/><br/>
       <sub><b>AI</b></sub>
     </td>
   </tr>
+   
   <tr>
+   <td align="center">
+      <img src="app/src/main/assets/AI_Model_in_action.jpeg" width="150"/><br/>
+      <sub><b>AI model in action</b></sub>
+   </td>
     <td align="center">
       <img src="app/src/main/assets/CartScreen.jpeg" width="150"/><br/>
       <sub><b>Cart Screen</b></sub>
@@ -82,12 +87,12 @@ I also experimented with integrating **AI-based food suggestions** for a persona
       <img src="app/src/main/assets/paymentScreen2.jpeg" width="150"/><br/>
       <sub><b>Payment Screen 2</b></sub>
     </td>
+  </tr>
+   <tr>
    <td align="center">
       <img src="app/src/main/assets/ProfileScreen.jpeg" width="150"/><br/>
       <sub><b>Profile Screen</b></sub>
     </td>
-  </tr>
-   <tr>
     <td align="center">
       <img src="app/src/main/assets/paymentOptions.jpeg" width="150"/><br/>
       <sub><b>Payment Options</b></sub>
